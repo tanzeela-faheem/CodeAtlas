@@ -140,12 +140,12 @@ export class GitClonerService {
             console.log("=================================\n");
 
             return {
-                url: repositoryUrl,
-                branch: currentBranch,
-                tag: options.tag,
-                commit: currentCommit,
-                clonePath
-            };
+  url: repositoryUrl,
+  branch: currentBranch,
+  commit: currentCommit,
+  clonePath,
+  ...(options.tag !== undefined && { tag: options.tag }),
+};
 
         } catch (error) {
 

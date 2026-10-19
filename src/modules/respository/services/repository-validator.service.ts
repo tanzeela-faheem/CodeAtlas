@@ -4,7 +4,8 @@ import path from "path";
 import type {
     RepositoryValidationReport,
     RepositoryImportRequest,
-    RepositorySourceType
+    RepositorySourceType,
+    ValidationStatus
 } from "../types/repository.types.js";
 
 

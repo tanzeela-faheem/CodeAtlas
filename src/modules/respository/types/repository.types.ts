@@ -1,5 +1,6 @@
 import { simpleGit, type SimpleGit } from "simple-git";
 import type { RepositoryMetadataService } from "../services/repository-metadata.service.js";
+import type { ProjectProfile } from "../../project-detection/types/project-detection.types.js";
 
 export interface GitCloneOptions {
     branch?: string;
@@ -9,12 +10,13 @@ export interface GitCloneOptions {
 }
 
 export interface GitRepositoryInfo {
-    url: string;
-    branch?: string;
-    tag?: string;
-    commit: string;
-    clonePath: string;
+  url: string;
+  branch?: string;
+  tag?: string | undefined;
+  commit: string;
+  clonePath: string;
 }
+
 export type RepositorySourceType =
     | "git"
     | "zip"
@@ -75,25 +77,21 @@ export interface RepositoryValidationReport {
 
 
 export interface RepositoryImportResult {
-
     projectId: string;
-
     projectName: string;
-
     sourceType: RepositorySourceType;
-
     status: ImportStatus;
-
     workspacePath: string;
-
     repositoryPath: string;
-
     importedAt: string;
-
     message: string;
 
     validation?: RepositoryValidationReport;
     metadata?: RepositoryMetadata;
+
+    // Optional analysis result; persistence is handled separately.
+    projectProfile?: ProjectProfile;
+    detectionError?: string;
 }
 
 export class GitClonerService {
@@ -259,11 +257,11 @@ export interface RepositoryMetadata {
 
     lastUpdated: string;
 
-    gitUrl?: string;
+    gitUrl?: string | undefined;
 
-    defaultBranch?: string;
+    defaultBranch?: string | undefined;
 
-    commitHash?: string;
+    commitHash?: string | undefined;
 
     repositorySize: number;
 
