@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import "dotenv/config";
 
 export interface ProjectWorkspace {
     projectId: string;
@@ -21,10 +22,8 @@ export interface WorkspaceStorageReport {
 
 export class WorkspaceManagerService {
     private readonly workspacesRoot = path.resolve(
-        process.cwd(),
-        "storage",
-        "workspaces"
-    );
+    process.env.WORKSPACE_ROOT?.trim() || "storage/workspaces"
+);
 
     private readonly directoryNames = [
         "repository",
