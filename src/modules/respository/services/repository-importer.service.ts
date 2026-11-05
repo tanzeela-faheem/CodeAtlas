@@ -57,7 +57,7 @@ export class RepositoryImporterService {
             const source = request.source.trim();
 
             if (request.sourceType === "git" && !this.isGitUrl(source)) {
-                throw new Error("Invalid Git source. Provide an HTTPS, HTTP, SSH, or Git SSH URL.");
+                throw new Error("Invalid Git source. Provide an HTTPS URL.");
             }
 
             // 2. Generate the project ID and name.
@@ -192,6 +192,7 @@ export class RepositoryImporterService {
                 });
             return result;
         } catch (error) {
+            console.log(error);
             // Remove partially imported data if a stage throws.
             if (workspaceCreated && workspace) {
                 try {

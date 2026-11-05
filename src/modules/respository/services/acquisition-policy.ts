@@ -52,11 +52,11 @@ const EXCLUDED_EXTENSIONS = new Set([
     ".pyc"
 ]);
 
-function shouldSkipDirectory(name: string): boolean {
+export function shouldSkipDirectory(name: string): boolean {
     return EXCLUDED_DIRECTORIES.has(name);
 }
 
-function shouldSkipFile(name: string): boolean {
+export function shouldSkipFile(name: string): boolean {
     return EXCLUDED_EXTENSIONS.has(path.extname(name).toLowerCase());
 }
 
@@ -73,7 +73,6 @@ export class AcquisitionBudget {
             bytes > this.limits.maxFileBytes ||
             depth > this.limits.maxDepth
         ) {
-            console.log(`${this.files} ${this.bytes} bytes:${bytes} depth: ${depth}`);
             throw new Error("Acquisition resource limit exceeded");
         }
     }
