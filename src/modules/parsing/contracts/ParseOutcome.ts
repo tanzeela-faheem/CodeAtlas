@@ -1,3 +1,4 @@
+import type { ParserProvenance } from "./ParserProvenance.js";
 import type { ParseResult } from "./ParseResult.js";
 
 export type ParseFailureCode =
@@ -14,6 +15,7 @@ export type ParseOutcome =
           readonly projectId: string;
           readonly relativePath: string;
           readonly parserId: string;
+          readonly provenance?: ParserProvenance;
           readonly result: ParseResult;
       }
     | {

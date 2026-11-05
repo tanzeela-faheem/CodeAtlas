@@ -4,9 +4,7 @@ import type {
     RepositoryValidationReport
 } from "../types/repository.types.js";
 
-
 export class RepositoryMetadataService {
-
     /**
      * Creates metadata for an imported repository.
      */
@@ -20,74 +18,38 @@ export class RepositoryMetadataService {
             commitHash?: string;
         }
     ): RepositoryMetadata {
-
-        const now =
-            new Date().toISOString();
-
+        const now = new Date().toISOString();
 
         const metadata: RepositoryMetadata = {
-
             projectId,
 
             projectName,
 
-            repositorySource:
-                request.sourceType,
+            repositorySource: request.sourceType,
 
-            importDate:
-                now,
+            importDate: now,
 
-            lastUpdated:
-                now,
+            lastUpdated: now,
 
-            gitUrl:
-                request.sourceType === "git"
-                    ? request.source
-                    : undefined,
+            gitUrl: request.sourceType === "git" ? request.source : undefined,
 
-            defaultBranch:
-                gitInfo?.defaultBranch,
+            defaultBranch: gitInfo?.defaultBranch,
 
-            commitHash:
-                gitInfo?.commitHash,
+            commitHash: gitInfo?.commitHash,
 
-            repositorySize:
-                validationReport.totalSize,
+            repositorySize: validationReport.totalSize,
 
-            numberOfFiles:
-                validationReport.totalFiles,
+            numberOfFiles: validationReport.totalFiles,
 
-            numberOfDirectories:
-                validationReport.totalDirectories,
+            numberOfDirectories: validationReport.totalDirectories,
 
-            importStatus:
-                validationReport.status === "invalid"
-                    ? "failed"
-                    : "imported",
+            importStatus: validationReport.status === "invalid" ? "failed" : "imported",
 
-            validationStatus:
-                validationReport.status
+            validationStatus: validationReport.status
         };
-
-
-        console.log("\n=================================");
-        console.log("REPOSITORY METADATA");
-        console.log("=================================");
-
-        console.log(
-            JSON.stringify(
-                metadata,
-                null,
-                2
-            )
-        );
-
-        console.log("=================================\n");
-
 
         return metadata;
     }
-
 
     /**
      * Update existing metadata.
@@ -95,22 +57,15 @@ export class RepositoryMetadataService {
      * Later this method can directly update
      * the database record.
      */
-    updateMetadata(
-        existingMetadata: RepositoryMetadata,
-        updates: Partial<RepositoryMetadata>
-    ): RepositoryMetadata {
-
+    updateMetadata(existingMetadata: RepositoryMetadata, updates: Partial<RepositoryMetadata>): RepositoryMetadata {
         return {
-
             ...existingMetadata,
 
             ...updates,
 
-            lastUpdated:
-                new Date().toISOString()
+            lastUpdated: new Date().toISOString()
         };
     }
-
 
     /**
      * Retrieve metadata.
@@ -119,13 +74,9 @@ export class RepositoryMetadataService {
      *
      * Later this can become a DB query.
      */
-    getMetadata(
-        metadata: RepositoryMetadata
-    ): RepositoryMetadata {
-
+    getMetadata(metadata: RepositoryMetadata): RepositoryMetadata {
         return metadata;
     }
-
 
     /**
      * Delete metadata.
@@ -133,12 +84,5 @@ export class RepositoryMetadataService {
      * Currently there is no database.
      * So this simply represents the operation.
      */
-    deleteMetadata(
-        projectId: string
-    ): void {
-
-        console.log(
-            `Metadata deleted for project: ${projectId}`
-        );
-    }
+    deleteMetadata(projectId: string): void {}
 }

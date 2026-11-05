@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { MAX_SOURCE_BYTES } from "../../../config.js";
 
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -121,87 +123,58 @@ const SOURCE_LIKE_EXTENSIONS = new Set([
     ".plsql"
 ]);
 
-const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
+const MAX_FILE_SIZE_BYTES = MAX_SOURCE_BYTES;
 
 export class LanguageDetectorService {
-    async detectLanguages(
-        repositoryPath: string
-    ): Promise<LanguageDetectionResult> {
+    async detectLanguages(repositoryPath: string): Promise<LanguageDetectionResult> {
         const rootPath = path.resolve(repositoryPath);
 
         const rootStats = await fs.stat(rootPath);
 
         if (!rootStats.isDirectory()) {
-            throw new Error(
-                `Repository path is not a directory: ${rootPath}`
-            );
+            throw new Error(`Repository path is not a directory: ${rootPath}`);
         }
 
         const sourceFiles: SourceFile[] = [];
         const unknownExtensions = new Set<string>();
 
-        await this.scanDirectory(
-            rootPath,
-            rootPath,
-            false,
-            sourceFiles,
-            unknownExtensions
-        );
+        await this.scanDirectory(rootPath, rootPath, false, sourceFiles, unknownExtensions);
 
         // Generated source files remain in the inventory, but are excluded
         // from developer-written language statistics.
-        const countedFiles = sourceFiles.filter(
-            (file) => !file.isGenerated
-        );
+        const countedFiles = sourceFiles.filter((file) => !file.isGenerated);
 
         const linesByLanguage = new Map<ProgrammingLanguage, number>();
         const filesByLanguage = new Map<ProgrammingLanguage, number>();
 
         for (const file of countedFiles) {
-            filesByLanguage.set(
-                file.language,
-                (filesByLanguage.get(file.language) ?? 0) + 1
-            );
+            filesByLanguage.set(file.language, (filesByLanguage.get(file.language) ?? 0) + 1);
 
-            linesByLanguage.set(
-                file.language,
-                (linesByLanguage.get(file.language) ?? 0) +
-                    file.linesOfCode
-            );
+            linesByLanguage.set(file.language, (linesByLanguage.get(file.language) ?? 0) + file.linesOfCode);
         }
 
         const totalSourceFiles = countedFiles.length;
 
-        const totalLinesOfCode = countedFiles.reduce(
-            (total, file) => total + file.linesOfCode,
-            0
-        );
+        const totalLinesOfCode = countedFiles.reduce((total, file) => total + file.linesOfCode, 0);
 
-        const languages: LanguageStatistics[] = [
-            ...filesByLanguage.keys()
-        ].map((language) => {
-            const fileCount = filesByLanguage.get(language) ?? 0;
-            const linesOfCode = linesByLanguage.get(language) ?? 0;
+        const languages: LanguageStatistics[] = [...filesByLanguage.keys()]
+            .map((language) => {
+                const fileCount = filesByLanguage.get(language) ?? 0;
+                const linesOfCode = linesByLanguage.get(language) ?? 0;
 
-            return {
-                language,
-                fileCount,
-                linesOfCode,
-                percentageOfSourceFiles: totalSourceFiles > 0
-                    ? Number(
-                        ((fileCount / totalSourceFiles) * 100).toFixed(2)
-                    )
-                    : 0,
-                percentageOfLinesOfCode: totalLinesOfCode > 0
-                    ? Number(
-                        ((linesOfCode / totalLinesOfCode) * 100).toFixed(2)
-                    )
-                    : 0
-            };
-        }).sort((a, b) => b.linesOfCode - a.linesOfCode);
+                return {
+                    language,
+                    fileCount,
+                    linesOfCode,
+                    percentageOfSourceFiles:
+                        totalSourceFiles > 0 ? Number(((fileCount / totalSourceFiles) * 100).toFixed(2)) : 0,
+                    percentageOfLinesOfCode:
+                        totalLinesOfCode > 0 ? Number(((linesOfCode / totalLinesOfCode) * 100).toFixed(2)) : 0
+                };
+            })
+            .sort((a, b) => b.linesOfCode - a.linesOfCode);
 
-       const dominantLanguage = languages[0]?.language ?? null;
-
+        const dominantLanguage = languages[0]?.language ?? null;
 
         const result: LanguageDetectionResult = {
             languages,
@@ -213,26 +186,8 @@ export class LanguageDetectorService {
             detectedAt: new Date().toISOString()
         };
 
-        console.log("\n========== LANGUAGE DETECTION ==========");
-        console.log(`Repository: ${rootPath}`);
-        console.log(`Source files counted: ${totalSourceFiles}`);
-        console.log(`Generated source files: ${
-            sourceFiles.filter((file) => file.isGenerated).length
-        }`);
-        console.log(`Total lines of code: ${totalLinesOfCode}`);
-        console.log(`Dominant language: ${dominantLanguage ?? "Unknown"}`);
-
-        console.log("\nLanguage statistics:");
-        console.table(languages);
-
         if (result.unknownExtensions.length > 0) {
-            console.log(
-                "Unrecognized source-like extensions:",
-                result.unknownExtensions
-            );
         }
-
-        console.log("========================================\n");
 
         return result;
     }
@@ -262,8 +217,7 @@ export class LanguageDetectorService {
                     continue;
                 }
 
-                const generatedDirectory =
-                    GENERATED_DIRECTORY_NAMES.has(entry.name.toLowerCase());
+                const generatedDirectory = GENERATED_DIRECTORY_NAMES.has(entry.name.toLowerCase());
 
                 await this.scanDirectory(
                     rootPath,
@@ -282,10 +236,7 @@ export class LanguageDetectorService {
 
             const extension = path.extname(entry.name).toLowerCase();
 
-            const language = await this.identifyLanguage(
-                absolutePath,
-                extension
-            );
+            const language = await this.identifyLanguage(absolutePath, extension);
 
             if (!language) {
                 if (SOURCE_LIKE_EXTENSIONS.has(extension)) {
@@ -299,21 +250,29 @@ export class LanguageDetectorService {
 
             // Avoid reading huge files into memory during this initial scan.
             if (stats.size > MAX_FILE_SIZE_BYTES) {
+                sourceFiles.push({
+                    absolutePath,
+                    relativePath: path.relative(rootPath, absolutePath).split(path.sep).join("/"),
+                    extension,
+                    language,
+                    linesOfCode: 0,
+                    isGenerated: inheritedGenerated,
+                    sizeBytes: stats.size,
+                    modifiedAtMs: stats.mtimeMs
+                });
                 continue;
             }
 
             const content = await fs.readFile(absolutePath, "utf8");
 
-            const relativePath = path.relative(
-                rootPath,
-                absolutePath
-            ).split(path.sep).join("/");
+            const relativePath = path.relative(rootPath, absolutePath).split(path.sep).join("/");
 
-            const isGenerated =
-                inheritedGenerated ||
-                this.isGeneratedFile(entry.name, relativePath, content);
+            const isGenerated = inheritedGenerated || this.isGeneratedFile(entry.name, relativePath, content);
 
             sourceFiles.push({
+                contentHash: createHash("sha256").update(content).digest("hex"),
+                sizeBytes: stats.size,
+                modifiedAtMs: stats.mtimeMs,
                 absolutePath,
                 relativePath,
                 extension,
@@ -324,10 +283,7 @@ export class LanguageDetectorService {
         }
     }
 
-    private async identifyLanguage(
-        filePath: string,
-        extension: string
-    ): Promise<ProgrammingLanguage | null> {
+    private async identifyLanguage(filePath: string, extension: string): Promise<ProgrammingLanguage | null> {
         const mappedLanguage = EXTENSION_LANGUAGE[extension];
 
         if (!mappedLanguage) {
@@ -338,9 +294,7 @@ export class LanguageDetectorService {
         if (extension === ".h") {
             const content = await this.readSmallSample(filePath);
 
-            if (
-                /\b(namespace|template\s*<|std::|class\s+\w+)/.test(content)
-            ) {
+            if (/\b(namespace|template\s*<|std::|class\s+\w+)/.test(content)) {
                 return "C++";
             }
 
@@ -351,17 +305,11 @@ export class LanguageDetectorService {
         if (extension === ".m") {
             const content = await this.readSmallSample(filePath);
 
-            if (
-                /@interface\b|@implementation\b|#import\s+[<"]/.test(content)
-            ) {
+            if (/@interface\b|@implementation\b|#import\s+[<"]/.test(content)) {
                 return "Objective-C";
             }
 
-            if (
-                /^\s*function\b/m.test(content) ||
-                /^\s*end\s*$/m.test(content) ||
-                /\bdisp\s*\(/.test(content)
-            ) {
+            if (/^\s*function\b/m.test(content) || /^\s*end\s*$/m.test(content) || /\bdisp\s*\(/.test(content)) {
                 return "MATLAB";
             }
 
@@ -376,12 +324,7 @@ export class LanguageDetectorService {
 
         try {
             const buffer = Buffer.alloc(8192);
-            const { bytesRead } = await handle.read(
-                buffer,
-                0,
-                buffer.length,
-                0
-            );
+            const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
 
             return buffer.toString("utf8", 0, bytesRead);
         } finally {
@@ -389,11 +332,7 @@ export class LanguageDetectorService {
         }
     }
 
-    private isGeneratedFile(
-        fileName: string,
-        relativePath: string,
-        content: string
-    ): boolean {
+    private isGeneratedFile(fileName: string, relativePath: string, content: string): boolean {
         const normalizedPath = relativePath.toLowerCase();
         const normalizedName = fileName.toLowerCase();
 
@@ -422,15 +361,10 @@ export class LanguageDetectorService {
             return true;
         }
 
-        return normalizedPath.split("/").some((part) =>
-            GENERATED_DIRECTORY_NAMES.has(part)
-        );
+        return normalizedPath.split("/").some((part) => GENERATED_DIRECTORY_NAMES.has(part));
     }
 
-    private countLinesOfCode(
-        content: string,
-        language: ProgrammingLanguage
-    ): number {
+    private countLinesOfCode(content: string, language: ProgrammingLanguage): number {
         const lines = content.split(/\r?\n/);
 
         let count = 0;
@@ -493,10 +427,7 @@ export class LanguageDetectorService {
                     }
                 }
 
-                if (
-                    remaining.startsWith("//") ||
-                    remaining.startsWith("*")
-                ) {
+                if (remaining.startsWith("//") || remaining.startsWith("*")) {
                     continue;
                 }
 
@@ -504,26 +435,15 @@ export class LanguageDetectorService {
                 continue;
             }
 
-            if (
-                ["Python", "Ruby", "Shell", "PowerShell", "R", "Perl"].includes(
-                    language
-                ) &&
-                line.startsWith("#")
-            ) {
+            if (["Python", "Ruby", "Shell", "PowerShell", "R", "Perl"].includes(language) && line.startsWith("#")) {
                 continue;
             }
 
-            if (
-                ["SQL", "Lua", "Haskell", "Elixir"].includes(language) &&
-                line.startsWith("--")
-            ) {
+            if (["SQL", "Lua", "Haskell", "Elixir"].includes(language) && line.startsWith("--")) {
                 continue;
             }
 
-            if (
-                ["HTML", "CSS"].includes(language) &&
-                line.startsWith("<!--")
-            ) {
+            if (["HTML", "CSS"].includes(language) && line.startsWith("<!--")) {
                 continue;
             }
 

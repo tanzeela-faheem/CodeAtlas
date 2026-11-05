@@ -10,32 +10,20 @@ export interface GitCloneOptions {
 }
 
 export interface GitRepositoryInfo {
-  url: string;
-  branch?: string;
-  tag?: string | undefined;
-  commit: string;
-  clonePath: string;
+    url: string;
+    branch?: string;
+    tag?: string | undefined;
+    commit: string;
+    clonePath: string;
 }
 
-export type RepositorySourceType =
-    | "git"
-    | "zip"
-    | "local";
+export type RepositorySourceType = "git" | "zip" | "local";
 
+export type ImportStatus = "imported" | "failed";
 
-export type ImportStatus =
-    | "imported"
-    | "failed";
-
-
-export type ValidationStatus =
-    | "valid"
-    | "invalid"
-    | "warning";
-
+export type ValidationStatus = "valid" | "invalid" | "warning";
 
 export interface RepositoryImportRequest {
-
     sourceType: RepositorySourceType;
 
     source: string;
@@ -49,9 +37,7 @@ export interface RepositoryImportRequest {
     shallow?: boolean;
 }
 
-
 export interface RepositoryValidationReport {
-
     status: ValidationStatus;
 
     repositoryPath: string;
@@ -75,7 +61,6 @@ export interface RepositoryValidationReport {
     validatedAt: string;
 }
 
-
 export interface RepositoryImportResult {
     projectId: string;
     projectName: string;
@@ -95,7 +80,6 @@ export interface RepositoryImportResult {
 }
 
 export class GitClonerService {
-
     /**
      * Clone a Git repository into the provided workspace path.
      */
@@ -104,7 +88,6 @@ export class GitClonerService {
         clonePath: string,
         options: GitCloneOptions = {}
     ): Promise<GitRepositoryInfo> {
-
         console.log("\n=================================");
         console.log("GIT REPOSITORY CLONER");
         console.log("=================================");
@@ -129,7 +112,6 @@ export class GitClonerService {
         }
 
         try {
-
             const git: SimpleGit = simpleGit();
 
             // ----------------------------------------
@@ -139,17 +121,11 @@ export class GitClonerService {
             const cloneOptions: string[] = [];
 
             if (options.branch) {
-                cloneOptions.push(
-                    "--branch",
-                    options.branch
-                );
+                cloneOptions.push("--branch", options.branch);
             }
 
             if (options.shallow) {
-                cloneOptions.push(
-                    "--depth",
-                    "1"
-                );
+                cloneOptions.push("--depth", "1");
             }
 
             // ----------------------------------------
@@ -158,11 +134,7 @@ export class GitClonerService {
 
             console.log("\nCloning repository...");
 
-            await git.clone(
-                repositoryUrl,
-                clonePath,
-                cloneOptions
-            );
+            await git.clone(repositoryUrl, clonePath, cloneOptions);
 
             console.log("Repository cloned successfully.");
 
@@ -177,14 +149,9 @@ export class GitClonerService {
             // ----------------------------------------
 
             if (options.commit) {
+                console.log(`Checking out commit: ${options.commit}`);
 
-                console.log(
-                    `Checking out commit: ${options.commit}`
-                );
-
-                await clonedGit.checkout(
-                    options.commit
-                );
+                await clonedGit.checkout(options.commit);
             }
 
             // ----------------------------------------
@@ -195,26 +162,19 @@ export class GitClonerService {
                 maxCount: 1
             });
 
-            const currentCommit =
-                log.latest?.hash || "";
+            const currentCommit = log.latest?.hash || "";
 
-            console.log(
-                `Current Commit : ${currentCommit}`
-            );
+            console.log(`Current Commit : ${currentCommit}`);
 
             // ----------------------------------------
             // Get current branch
             // ----------------------------------------
 
-            const branchSummary =
-                await clonedGit.branch();
+            const branchSummary = await clonedGit.branch();
 
-            const currentBranch =
-                branchSummary.current;
+            const currentBranch = branchSummary.current;
 
-            console.log(
-                `Current Branch : ${currentBranch}`
-            );
+            console.log(`Current Branch : ${currentBranch}`);
 
             console.log("=================================\n");
 
@@ -225,33 +185,23 @@ export class GitClonerService {
                 commit: currentCommit,
                 clonePath
             };
-
         } catch (error) {
-
-            console.error(
-                "\nGit clone failed."
-            );
+            console.error("\nGit clone failed.");
 
             if (error instanceof Error) {
                 console.error(error.message);
             }
 
-            throw new Error(
-                "Unable to clone Git repository"
-            );
+            throw new Error("Unable to clone Git repository");
         }
     }
 }
 export interface RepositoryMetadata {
-
     projectId: string;
 
     projectName: string;
 
-    repositorySource:
-        | "git"
-        | "zip"
-        | "local";
+    repositorySource: "git" | "zip" | "local";
 
     importDate: string;
 
@@ -269,12 +219,7 @@ export interface RepositoryMetadata {
 
     numberOfDirectories: number;
 
-    importStatus:
-        | "imported"
-        | "failed";
+    importStatus: "imported" | "failed";
 
-    validationStatus:
-        | "valid"
-        | "invalid"
-        | "warning";
+    validationStatus: "valid" | "invalid" | "warning";
 }

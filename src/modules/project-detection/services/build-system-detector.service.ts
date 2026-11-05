@@ -1,12 +1,7 @@
-
 import * as fs from "fs";
 import * as path from "path";
 
-import type {
-    BuildSystemDetectionResult,
-    BuildSystemInfo,
-    BuildTool,
-} from "../types/project-detection.types.js";
+import type { BuildSystemDetectionResult, BuildSystemInfo, BuildTool } from "../types/project-detection.types.js";
 
 interface BuildRule {
     name: BuildTool;
@@ -28,36 +23,27 @@ export class BuildSystemDetectorService {
         "__pycache__",
         ".next",
         ".nuxt",
-        "coverage",
+        "coverage"
     ]);
 
     private readonly rules: BuildRule[] = [
         {
             name: "Vite",
             buildFiles: [],
-            configurationFiles: [
-                "vite.config.js",
-                "vite.config.ts",
-                "vite.config.mjs",
-                "vite.config.mts",
-            ],
+            configurationFiles: ["vite.config.js", "vite.config.ts", "vite.config.mjs", "vite.config.mts"],
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: [],
-            outputDirectories: ["dist"],
+            outputDirectories: ["dist"]
         },
         {
             name: "Webpack",
             buildFiles: [],
-            configurationFiles: [
-                "webpack.config.js",
-                "webpack.config.ts",
-                "webpack.config.cjs",
-            ],
+            configurationFiles: ["webpack.config.js", "webpack.config.ts", "webpack.config.cjs"],
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: [],
-            outputDirectories: ["dist", "build"],
+            outputDirectories: ["dist", "build"]
         },
         {
             name: "esbuild",
@@ -66,7 +52,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: [],
-            outputDirectories: ["dist", "build"],
+            outputDirectories: ["dist", "build"]
         },
         {
             name: "npm scripts",
@@ -75,7 +61,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: [],
-            outputDirectories: ["dist", "build"],
+            outputDirectories: ["dist", "build"]
         },
         {
             name: "Maven",
@@ -84,7 +70,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src/main"],
             testDirectories: ["src/test"],
             generatedDirectories: ["target/generated-sources"],
-            outputDirectories: ["target"],
+            outputDirectories: ["target"]
         },
         {
             name: "Gradle",
@@ -93,7 +79,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src/main"],
             testDirectories: ["src/test"],
             generatedDirectories: ["build/generated"],
-            outputDirectories: ["build"],
+            outputDirectories: ["build"]
         },
         {
             name: "Make",
@@ -102,7 +88,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: [],
-            outputDirectories: ["build", "out"],
+            outputDirectories: ["build", "out"]
         },
         {
             name: "CMake",
@@ -111,7 +97,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: ["build/generated"],
-            outputDirectories: ["build", "out"],
+            outputDirectories: ["build", "out"]
         },
         {
             name: "Cargo",
@@ -120,7 +106,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests"],
             generatedDirectories: ["target"],
-            outputDirectories: ["target"],
+            outputDirectories: ["target"]
         },
         {
             name: "Go build",
@@ -129,7 +115,7 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["cmd", "internal", "pkg"],
             testDirectories: [],
             generatedDirectories: [],
-            outputDirectories: ["bin", "dist"],
+            outputDirectories: ["bin", "dist"]
         },
         {
             name: "MSBuild",
@@ -138,13 +124,11 @@ export class BuildSystemDetectorService {
             sourceDirectories: ["src"],
             testDirectories: ["tests", "test"],
             generatedDirectories: ["obj"],
-            outputDirectories: ["bin", "obj"],
-        },
+            outputDirectories: ["bin", "obj"]
+        }
     ];
 
-    async detectBuildSystems(
-        repositoryPath: string,
-    ): Promise<BuildSystemDetectionResult> {
+    async detectBuildSystems(repositoryPath: string): Promise<BuildSystemDetectionResult> {
         const root = path.resolve(repositoryPath);
 
         if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
@@ -156,25 +140,19 @@ export class BuildSystemDetectorService {
         const buildSystems: BuildSystemInfo[] = [];
 
         for (const rule of this.rules) {
-            const matchingBuildFiles = files.filter((file) =>
-                rule.buildFiles.includes(path.basename(file)),
+            const matchingBuildFiles = files.filter((file) => rule.buildFiles.includes(path.basename(file)));
+
+            const matchingConfigFiles = files.filter(
+                (file) =>
+                    rule.configurationFiles.includes(path.relative(root, file).replace(/\\/g, "/")) ||
+                    rule.configurationFiles.includes(path.basename(file))
             );
 
-            const matchingConfigFiles = files.filter((file) =>
-                rule.configurationFiles.includes(
-                    path.relative(root, file).replace(/\\/g, "/"),
-                ) ||
-                rule.configurationFiles.includes(path.basename(file)),
-            );
-
-            let evidenceCount =
-                matchingBuildFiles.length + matchingConfigFiles.length;
+            let evidenceCount = matchingBuildFiles.length + matchingConfigFiles.length;
 
             // MSBuild projects are identified by project or solution files.
             if (rule.name === "MSBuild") {
-                const msbuildFiles = files.filter((file) =>
-                    /\.(csproj|fsproj|vbproj|sln)$/i.test(file),
-                );
+                const msbuildFiles = files.filter((file) => /\.(csproj|fsproj|vbproj|sln)$/i.test(file));
 
                 matchingBuildFiles.push(...msbuildFiles);
                 evidenceCount += msbuildFiles.length;
@@ -182,53 +160,37 @@ export class BuildSystemDetectorService {
 
             // npm scripts are only evidence when package.json defines scripts.
             if (rule.name === "npm scripts") {
-                const packageFiles = matchingBuildFiles.filter(
-                    (file) => path.basename(file) === "package.json",
-                );
+                const packageFiles = matchingBuildFiles.filter((file) => path.basename(file) === "package.json");
 
                 const packagesWithScripts = packageFiles.filter((file) => {
                     try {
-                        const parsed = JSON.parse(
-                            fs.readFileSync(file, "utf8"),
-                        ) as { scripts?: Record<string, unknown> };
+                        const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as {
+                            scripts?: Record<string, unknown>;
+                        };
 
-                        return (
-                            parsed.scripts !== undefined &&
-                            Object.keys(parsed.scripts).length > 0
-                        );
+                        return parsed.scripts !== undefined && Object.keys(parsed.scripts).length > 0;
                     } catch {
                         return false;
                     }
                 });
 
-                matchingBuildFiles.splice(
-                    0,
-                    matchingBuildFiles.length,
-                    ...packagesWithScripts,
-                );
+                matchingBuildFiles.splice(0, matchingBuildFiles.length, ...packagesWithScripts);
 
                 evidenceCount = packagesWithScripts.length;
             }
 
             // esbuild can be declared in package.json without its own config file.
             if (rule.name === "esbuild") {
-                const packageFiles = files.filter(
-                    (file) => path.basename(file) === "package.json",
-                );
+                const packageFiles = files.filter((file) => path.basename(file) === "package.json");
 
                 const esbuildPackages = packageFiles.filter((file) => {
                     try {
-                        const parsed = JSON.parse(
-                            fs.readFileSync(file, "utf8"),
-                        ) as {
+                        const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as {
                             dependencies?: Record<string, unknown>;
                             devDependencies?: Record<string, unknown>;
                         };
 
-                        return Boolean(
-                            parsed.dependencies?.esbuild ||
-                            parsed.devDependencies?.esbuild,
-                        );
+                        return Boolean(parsed.dependencies?.esbuild || parsed.devDependencies?.esbuild);
                     } catch {
                         return false;
                     }
@@ -241,111 +203,67 @@ export class BuildSystemDetectorService {
                 continue;
             }
 
-            const sourceDirectories = this.findDirectories(
-                directories,
-                rule.sourceDirectories,
-            );
+            const sourceDirectories = this.findDirectories(directories, rule.sourceDirectories);
 
-            const testDirectories = this.findDirectories(
-                directories,
-                rule.testDirectories,
-            );
+            const testDirectories = this.findDirectories(directories, rule.testDirectories);
 
-            const generatedDirectories = this.findDirectories(
-                directories,
-                rule.generatedDirectories,
-            );
+            const generatedDirectories = this.findDirectories(directories, rule.generatedDirectories);
 
-            const outputDirectories = this.findDirectories(
-                directories,
-                rule.outputDirectories,
-            );
+            const outputDirectories = this.findDirectories(directories, rule.outputDirectories);
 
             buildSystems.push({
                 name: rule.name,
-                buildFiles: [
-                    ...new Set(
-                        matchingBuildFiles.map((file) =>
-                            this.relativePath(root, file),
-                        ),
-                    ),
-                ],
+                buildFiles: [...new Set(matchingBuildFiles.map((file) => this.relativePath(root, file)))],
                 sourceDirectories,
                 testDirectories,
                 generatedDirectories,
                 outputDirectories,
-                configurationFiles: [
-                    ...new Set(
-                        matchingConfigFiles.map((file) =>
-                            this.relativePath(root, file),
-                        ),
-                    ),
-                ],
-                confidence: this.calculateConfidence(rule.name, evidenceCount),
+                configurationFiles: [...new Set(matchingConfigFiles.map((file) => this.relativePath(root, file)))],
+                confidence: this.calculateConfidence(rule.name, evidenceCount)
             });
         }
 
         const result: BuildSystemDetectionResult = {
             buildSystems,
-            detectedAt: new Date().toISOString(),
+            detectedAt: new Date().toISOString()
         };
 
-        console.log("\n========== BUILD SYSTEM DETECTION ==========");
-        console.log(`Repository: ${root}`);
-        console.log(`Files inspected: ${files.length}`);
-        console.log(`Build systems detected: ${buildSystems.length}`);
-
         if (buildSystems.length > 0) {
-            console.table(
-                buildSystems.map((item) => ({
-                    name: item.name,
-                    buildFiles: item.buildFiles.length,
-                    configurationFiles: item.configurationFiles.length,
-                    sourceDirectories: item.sourceDirectories.length,
-                    confidence: `${item.confidence}%`,
-                })),
-            );
         } else {
-            console.log("No recognized build systems detected.");
         }
-
-        console.log("=============================================\n");
 
         return result;
     }
-    private calculateConfidence(
-    ruleName: BuildTool,
-    evidenceCount: number,
-): number {
-    if (evidenceCount <= 0) {
-        return 0;
+    private calculateConfidence(ruleName: BuildTool, evidenceCount: number): number {
+        if (evidenceCount <= 0) {
+            return 0;
+        }
+
+        const baseConfidence: Partial<Record<BuildTool, number>> = {
+            Vite: 95,
+            Webpack: 95,
+            esbuild: 95,
+            "npm scripts": 90,
+            Maven: 95,
+            Gradle: 95,
+            Make: 95,
+            CMake: 95,
+            Cargo: 95,
+            "Go build": 95,
+            MSBuild: 95
+        };
+
+        const base = baseConfidence[ruleName] ?? 70;
+
+        // Additional independent evidence increases confidence slightly.
+        return Math.min(99, base + Math.max(0, evidenceCount - 1) * 2);
     }
-
-    const baseConfidence: Partial<Record<BuildTool, number>> = {
-        Vite: 95,
-        Webpack: 95,
-        esbuild: 95,
-        "npm scripts": 90,
-        Maven: 95,
-        Gradle: 95,
-        Make: 95,
-        CMake: 95,
-        Cargo: 95,
-        "Go build": 95,
-        MSBuild: 95,
-    };
-
-    const base = baseConfidence[ruleName] ?? 70;
-
-    // Additional independent evidence increases confidence slightly.
-    return Math.min(99, base + Math.max(0, evidenceCount - 1) * 2);
-}
 
     private collectFiles(directory: string): string[] {
         const results: string[] = [];
 
         for (const entry of fs.readdirSync(directory, {
-            withFileTypes: true,
+            withFileTypes: true
         })) {
             const fullPath = path.join(directory, entry.name);
 
@@ -369,7 +287,7 @@ export class BuildSystemDetectorService {
         const results: string[] = [];
 
         for (const entry of fs.readdirSync(directory, {
-            withFileTypes: true,
+            withFileTypes: true
         })) {
             if (!entry.isDirectory() || entry.isSymbolicLink()) {
                 continue;
@@ -381,25 +299,16 @@ export class BuildSystemDetectorService {
 
             const fullPath = path.join(directory, entry.name);
             results.push(this.relativePath(directory, fullPath));
-            results.push(...this.collectDirectories(fullPath).map((child) =>
-                path.join(entry.name, child),
-            ));
+            results.push(...this.collectDirectories(fullPath).map((child) => path.join(entry.name, child)));
         }
 
         return results;
     }
 
-    private findDirectories(
-        directories: string[],
-        expectedNames: string[],
-    ): string[] {
-        const expected = new Set(
-            expectedNames.map((name) => name.toLowerCase()),
-        );
+    private findDirectories(directories: string[], expectedNames: string[]): string[] {
+        const expected = new Set(expectedNames.map((name) => name.toLowerCase()));
 
-        return directories.filter((directory) =>
-            expected.has(path.basename(directory).toLowerCase()),
-        );
+        return directories.filter((directory) => expected.has(path.basename(directory).toLowerCase()));
     }
 
     private relativePath(root: string, filePath: string): string {

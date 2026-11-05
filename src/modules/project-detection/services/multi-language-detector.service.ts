@@ -1,4 +1,3 @@
-
 import path from "node:path";
 import * as fs from "node:fs";
 
@@ -8,31 +7,22 @@ import type {
     LanguageDetectionResult,
     LanguageSegment,
     MultiLanguageDetectionResult,
-    ProgrammingLanguage,
+    ProgrammingLanguage
 } from "../types/project-detection.types.js";
 
 export class MultiLanguageDetectorService {
-    constructor(
-        private readonly languageDetector = new LanguageDetectorService(),
-    ) {}
+    constructor(private readonly languageDetector = new LanguageDetectorService()) {}
 
     async detectMultiLanguage(
         repositoryPath: string,
-        existingLanguageResult?: LanguageDetectionResult,
+        existingLanguageResult?: LanguageDetectionResult
     ): Promise<MultiLanguageDetectionResult> {
-        const languageResult =
-            existingLanguageResult ??
-            (await this.languageDetector.detectLanguages(repositoryPath));
+        const languageResult = existingLanguageResult ?? (await this.languageDetector.detectLanguages(repositoryPath));
 
         // Exclude generated files from language and module statistics.
-        const files = languageResult.sourceFiles.filter(
-            (file) => !file.isGenerated,
-        );
+        const files = languageResult.sourceFiles.filter((file) => !file.isGenerated);
 
-        const moduleLanguageCounts = new Map<
-            string,
-            Map<ProgrammingLanguage, number>
-        >();
+        const moduleLanguageCounts = new Map<string, Map<ProgrammingLanguage, number>>();
 
         for (const file of files) {
             const normalizedPath = file.relativePath.replace(/\\/g, "/");
@@ -40,30 +30,21 @@ export class MultiLanguageDetectorService {
 
             // Group source files by their first-level repository directory.
             // Root-level source files belong to the "." module.
-            const modulePath =
-                pathParts.length > 1 ? (pathParts[0] ?? ".") : ".";
+            const modulePath = pathParts.length > 1 ? (pathParts[0] ?? ".") : ".";
 
             if (!moduleLanguageCounts.has(modulePath)) {
-                moduleLanguageCounts.set(
-                    modulePath,
-                    new Map<ProgrammingLanguage, number>(),
-                );
+                moduleLanguageCounts.set(modulePath, new Map<ProgrammingLanguage, number>());
             }
 
             const languageCounts = moduleLanguageCounts.get(modulePath)!;
 
-            languageCounts.set(
-                file.language,
-                (languageCounts.get(file.language) ?? 0) + 1,
-            );
+            languageCounts.set(file.language, (languageCounts.get(file.language) ?? 0) + 1);
         }
 
         const segments: LanguageSegment[] = [];
 
         for (const [modulePath, languageCounts] of moduleLanguageCounts) {
-            const fileCountByLanguage: Partial<
-                Record<ProgrammingLanguage, number>
-            > = {};
+            const fileCountByLanguage: Partial<Record<ProgrammingLanguage, number>> = {};
 
             for (const [language, count] of languageCounts) {
                 fileCountByLanguage[language] = count;
@@ -72,30 +53,20 @@ export class MultiLanguageDetectorService {
             const languages = Array.from(languageCounts.keys()).sort();
 
             segments.push({
-                moduleName:
-                    modulePath === "."
-                        ? path.basename(path.resolve(repositoryPath))
-                        : modulePath,
+                moduleName: modulePath === "." ? path.basename(path.resolve(repositoryPath)) : modulePath,
                 modulePath,
                 languages,
-                fileCountByLanguage,
+                fileCountByLanguage
             });
         }
 
-        segments.sort((a, b) =>
-            a.modulePath.localeCompare(b.modulePath),
-        );
+        segments.sort((a, b) => a.modulePath.localeCompare(b.modulePath));
 
-        const allLanguages = Array.from(
-            new Set(segments.flatMap((segment) => segment.languages)),
-        ).sort();
+        const allLanguages = Array.from(new Set(segments.flatMap((segment) => segment.languages))).sort();
 
         const crossLanguageBoundaries = segments
             .filter((segment) => segment.languages.length > 1)
-            .map(
-                (segment) =>
-                    `${segment.modulePath}: ${segment.languages.join(" + ")}`,
-            );
+            .map((segment) => `${segment.modulePath}: ${segment.languages.join(" + ")}`);
 
         const moduleCount = segments.length;
 
@@ -106,35 +77,8 @@ export class MultiLanguageDetectorService {
             isMonorepo: this.hasMonorepoEvidence(repositoryPath),
             moduleCount,
             crossLanguageBoundaries,
-            detectedAt: new Date().toISOString(),
+            detectedAt: new Date().toISOString()
         };
-
-        console.log("\n========== MULTI-LANGUAGE DETECTION ==========");
-        console.log(`Repository: ${path.resolve(repositoryPath)}`);
-        console.log(`Languages detected: ${allLanguages.length}`);
-        console.log(`Multiple languages: ${result.isMultiLanguage}`);
-        console.log(`Modules detected: ${moduleCount}`);
-        console.log(`Potential monorepo: ${result.isMonorepo}`);
-
-        console.log("\nLanguages:");
-        console.log(allLanguages);
-
-        console.log("\nLanguage segments:");
-        console.table(
-            segments.map((segment) => ({
-                module: segment.moduleName,
-                path: segment.modulePath,
-                languages: segment.languages.join(", "),
-                filesByLanguage: Object.entries(
-                    segment.fileCountByLanguage,
-                )
-                    .map(([language, count]) => `${language}: ${count}`)
-                    .join(", "),
-            })),
-        );
-
-        console.log("\nCross-language boundaries:");
-        console.log(crossLanguageBoundaries);
 
         return result;
     }
@@ -149,14 +93,10 @@ export class MultiLanguageDetectorService {
             "nx.json",
             "turbo.json",
             "settings.gradle",
-            "settings.gradle.kts",
+            "settings.gradle.kts"
         ];
 
-        if (
-            monorepoMarkerFiles.some((fileName) =>
-                fs.existsSync(path.join(root, fileName)),
-            )
-        ) {
+        if (monorepoMarkerFiles.some((fileName) => fs.existsSync(path.join(root, fileName)))) {
             return true;
         }
 
@@ -168,18 +108,11 @@ export class MultiLanguageDetectorService {
         }
 
         try {
-            const packageJsonContent = fs.readFileSync(
-                packageJsonPath,
-                "utf8",
-            );
+            const packageJsonContent = fs.readFileSync(packageJsonPath, "utf8");
 
             const packageJson: unknown = JSON.parse(packageJsonContent);
 
-            if (
-                typeof packageJson !== "object" ||
-                packageJson === null ||
-                !("workspaces" in packageJson)
-            ) {
+            if (typeof packageJson !== "object" || packageJson === null || !("workspaces" in packageJson)) {
                 return false;
             }
 

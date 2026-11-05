@@ -1,3 +1,4 @@
+import { MAX_SOURCE_BYTES } from "../../../config.js";
 import path from "node:path";
 
 import type { LanguageParser } from "../contracts/LanguageParser.js";
@@ -17,7 +18,7 @@ export class ParserManager {
         private readonly registry: ParserRegistry,
         options: ParserManagerOptions = {}
     ) {
-        this.maxSourceBytes = options.maxSourceBytes ?? 2_000_000;
+        this.maxSourceBytes = options.maxSourceBytes ?? MAX_SOURCE_BYTES;
 
         if (!Number.isSafeInteger(this.maxSourceBytes) || this.maxSourceBytes <= 0) {
             throw new Error("maxSourceBytes must be a positive integer");
@@ -25,8 +26,8 @@ export class ParserManager {
     }
 
     parse(request: ParseRequest): ParseOutcome {
-        const projectId = request.projectId;
-        const relativePath = request.relativePath;
+        const projectId = typeof request?.projectId === "string" ? request.projectId : "";
+        const relativePath = typeof request?.relativePath === "string" ? request.relativePath : "";
 
         const fail = (code: ParseFailureCode, message: string): ParseOutcome => ({
             status: "failed",
@@ -40,7 +41,8 @@ export class ParserManager {
         if (
             !projectId?.trim() ||
             !relativePath?.trim() ||
-            !request.language?.trim() ||
+            typeof request?.language !== "string" ||
+            !request.language.trim() ||
             typeof request.sourceCode !== "string"
         ) {
             return fail("INVALID_REQUEST", "Missing or invalid required parse request fields");
@@ -108,8 +110,9 @@ export class ParserManager {
             return {
                 status: result.hasErrors ? "syntax_errors" : "success",
                 projectId,
-                relativePath,
+                relativePath: normalizedPath,
                 parserId: selected!.id,
+                provenance: selected!.provenance ?? { parserVersion: null, grammarVersion: null },
                 result
             };
         } catch (error) {

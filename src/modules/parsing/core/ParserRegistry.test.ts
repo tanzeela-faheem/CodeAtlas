@@ -23,7 +23,11 @@ describe("ParserRegistry", () => {
 
         registry.register(parser);
 
-        expect(registry.getById("javascript")).toBe(parser);
+        expect(registry.getById("javascript")).toMatchObject({
+            id: parser.id,
+            supportedLanguages: ["javascript"],
+            supportedExtensions: [".js", ".jsx"]
+        });
     });
 
     it("rejects duplicate parser IDs", () => {

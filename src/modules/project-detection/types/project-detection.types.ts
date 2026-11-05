@@ -1,4 +1,3 @@
-
 export type ProgrammingLanguage =
     | "JavaScript"
     | "TypeScript"
@@ -30,14 +29,7 @@ export type ProgrammingLanguage =
     | "Haskell"
     | "Other";
 
-export type FrameworkCategory =
-    | "backend"
-    | "frontend"
-    | "desktop"
-    | "game"
-    | "mobile"
-    | "testing"
-    | "other";
+export type FrameworkCategory = "backend" | "frontend" | "desktop" | "game" | "mobile" | "testing" | "other";
 
 export type BuildTool =
     | "Maven"
@@ -74,6 +66,9 @@ export type PackageManagerName =
     | "Unknown";
 
 export interface SourceFile {
+    contentHash?: string;
+    sizeBytes?: number;
+    modifiedAtMs?: number;
     absolutePath: string;
     relativePath: string;
     extension: string;

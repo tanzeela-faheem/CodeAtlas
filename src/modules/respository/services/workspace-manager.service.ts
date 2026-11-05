@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import "dotenv/config";
+import "../../../config.js";
 
 export interface ProjectWorkspace {
     projectId: string;
@@ -21,17 +21,24 @@ export interface WorkspaceStorageReport {
 }
 
 export class WorkspaceManagerService {
-    private readonly workspacesRoot = path.resolve(
-    process.env.WORKSPACE_ROOT?.trim() || "storage/workspaces"
-);
+    readonly workspacesRoot: string;
+    constructor(root = process.env.WORKSPACE_ROOT?.trim() || "storage/workspaces") {
+        this.workspacesRoot = path.resolve(root);
+    }
 
-    private readonly directoryNames = [
-        "repository",
-        "metadata",
-        "analysis",
-        "cache",
-        "temp"
-    ];
+    async resolveWorkspace(projectId: string): Promise<string> {
+        const target = this.getWorkspacePath(projectId);
+        const [root, actual, stat] = await Promise.all([
+            fs.realpath(this.workspacesRoot),
+            fs.realpath(target),
+            fs.lstat(target)
+        ]);
+        if (stat.isSymbolicLink() || !stat.isDirectory() || path.dirname(actual) !== root)
+            throw new Error("Unsafe workspace");
+        return actual;
+    }
+
+    private readonly directoryNames = ["repository", "metadata", "analysis", "cache", "temp"];
 
     /**
      * Resolve and validate a project workspace path.
@@ -41,14 +48,9 @@ export class WorkspaceManagerService {
             throw new Error("Invalid project ID");
         }
 
-        const workspacePath = path.resolve(
-            this.workspacesRoot,
-            projectId
-        );
+        const workspacePath = path.resolve(this.workspacesRoot, projectId);
 
-        if (
-            path.dirname(workspacePath) !== this.workspacesRoot
-        ) {
+        if (path.dirname(workspacePath) !== this.workspacesRoot) {
             throw new Error("Invalid workspace path");
         }
 
@@ -58,70 +60,30 @@ export class WorkspaceManagerService {
     /**
      * Create a workspace and its standard directories.
      */
-    async createWorkspace(
-        projectId: string
-    ): Promise<ProjectWorkspace> {
+    async createWorkspace(projectId: string): Promise<ProjectWorkspace> {
         const workspacePath = this.getWorkspacePath(projectId);
 
         await fs.mkdir(this.workspacesRoot, {
             recursive: true
         });
 
-        // Do not silently reuse an existing project workspace.
-        try {
-            await fs.access(workspacePath);
-            throw new Error(
-                `Workspace already exists for project ${projectId}`
-            );
-        } catch (error) {
-            if (
-                error instanceof Error &&
-                error.message.startsWith("Workspace already exists")
-            ) {
-                throw error;
-            }
-        }
+        // Exclusive mkdir establishes ownership before any cleanup is allowed.
+        await fs.mkdir(workspacePath);
 
         try {
-            await fs.mkdir(workspacePath);
-
             for (const directoryName of this.directoryNames) {
-                await fs.mkdir(
-                    path.join(workspacePath, directoryName)
-                );
+                await fs.mkdir(path.join(workspacePath, directoryName));
             }
 
             const workspace: ProjectWorkspace = {
                 projectId,
                 workspacePath,
-                repositoryPath: path.join(
-                    workspacePath,
-                    "repository"
-                ),
-                metadataPath: path.join(
-                    workspacePath,
-                    "metadata"
-                ),
-                analysisPath: path.join(
-                    workspacePath,
-                    "analysis"
-                ),
-                cachePath: path.join(
-                    workspacePath,
-                    "cache"
-                ),
-                tempPath: path.join(
-                    workspacePath,
-                    "temp"
-                )
+                repositoryPath: path.join(workspacePath, "repository"),
+                metadataPath: path.join(workspacePath, "metadata"),
+                analysisPath: path.join(workspacePath, "analysis"),
+                cachePath: path.join(workspacePath, "cache"),
+                tempPath: path.join(workspacePath, "temp")
             };
-
-            console.log("\n========== WORKSPACE CREATED ==========");
-            console.log(`Project ID : ${projectId}`);
-            console.log(`Workspace  : ${workspace.workspacePath}`);
-            console.log(`Repository : ${workspace.repositoryPath}`);
-            console.log("Directories: repository, metadata, analysis, cache, temp");
-            console.log("=======================================\n");
 
             return workspace;
         } catch (error) {
@@ -152,17 +114,13 @@ export class WorkspaceManagerService {
         await fs.mkdir(tempPath, {
             recursive: true
         });
-
-        console.log(`Temporary files cleaned: ${projectId}`);
     }
 
     /**
      * Reset a workspace to its original empty structure.
      * WARNING: This deletes repository and analysis contents.
      */
-    async resetWorkspace(
-        projectId: string
-    ): Promise<ProjectWorkspace> {
+    async resetWorkspace(projectId: string): Promise<ProjectWorkspace> {
         const workspacePath = this.getWorkspacePath(projectId);
 
         await fs.access(workspacePath);
@@ -171,8 +129,6 @@ export class WorkspaceManagerService {
             recursive: true,
             force: true
         });
-
-        console.log(`Workspace reset: ${projectId}`);
 
         return this.createWorkspace(projectId);
     }
@@ -188,16 +144,12 @@ export class WorkspaceManagerService {
             recursive: true,
             force: true
         });
-
-        console.log(`Workspace deleted: ${projectId}`);
     }
 
     /**
      * Calculate storage usage without following symbolic links.
      */
-    async getStorageUsage(
-        projectId: string
-    ): Promise<WorkspaceStorageReport> {
+    async getStorageUsage(projectId: string): Promise<WorkspaceStorageReport> {
         const workspacePath = this.getWorkspacePath(projectId);
 
         const rootStats = await fs.lstat(workspacePath);
@@ -241,10 +193,6 @@ export class WorkspaceManagerService {
             totalFiles,
             totalDirectories
         };
-
-        console.log("\n========== WORKSPACE STORAGE ==========");
-        console.log(JSON.stringify(report, null, 2));
-        console.log("=======================================\n");
 
         return report;
     }

@@ -1,11 +1,10 @@
+import { verifyAcquisition } from "./acquisition-policy.js";
+import { FileProjectStore, type ProjectStore } from "./project-store.js";
 
 import crypto from "crypto";
 import path from "path";
 
-import type {
-    RepositoryImportRequest,
-    RepositoryImportResult
-} from "../types/repository.types.js";
+import type { RepositoryImportRequest, RepositoryImportResult } from "../types/repository.types.js";
 
 import { WorkspaceManagerService } from "./workspace-manager.service.js";
 import { GitClonerService } from "./git-cloner.service.js";
@@ -15,72 +14,73 @@ import { RepositoryValidatorService } from "./repository-validator.service.js";
 import { RepositoryMetadataService } from "./repository-metadata.service.js";
 import { ProjectDetectionOrchestratorService } from "../../project-detection/services/project-detection-orchestrator.service.js";
 
+export class RepositoryImportError extends Error {
+    constructor(readonly code: string) {
+        super("Repository import failed");
+    }
+}
 export class RepositoryImporterService {
-    private readonly workspaceManager = new WorkspaceManagerService();
+    constructor(
+        private readonly workspaceManager = new WorkspaceManagerService(),
+        private readonly projectStore: ProjectStore = new FileProjectStore(workspaceManager),
+        private readonly projectDetection = new ProjectDetectionOrchestratorService(),
+        private readonly allocateId = () => `PRJ-${crypto.randomBytes(3).toString("hex").toUpperCase()}`
+    ) {}
     private readonly gitCloner = new GitClonerService();
     private readonly zipExtractor = new ZipExtractorService();
     private readonly localDirectoryImporter = new LocalDirectoryImporterService();
     private readonly repositoryValidator = new RepositoryValidatorService();
     private readonly repositoryMetadataService = new RepositoryMetadataService();
-    private readonly projectDetection =new ProjectDetectionOrchestratorService();
 
-    async importRepository(
-        request: RepositoryImportRequest
-    ): Promise<RepositoryImportResult> {
-        let workspace:
-            Awaited<ReturnType<WorkspaceManagerService["createWorkspace"]>>
-            | undefined;
+    async importRepository(request: RepositoryImportRequest): Promise<RepositoryImportResult> {
+        let workspace: Awaited<ReturnType<WorkspaceManagerService["createWorkspace"]>> | undefined;
 
         let workspaceCreated = false;
-
-        console.log("\n========== REPOSITORY IMPORT ==========");
+        let stage = "INVALID_IMPORT_REQUEST";
+        let gitInfo: { defaultBranch?: string; commitHash?: string } | undefined;
 
         try {
             // 1. Validate the request before creating anything.
-            if (
-                !request ||
-                typeof request.source !== "string" ||
-                !request.source.trim()
-            ) {
+            if (!request || typeof request.source !== "string" || !request.source.trim()) {
                 throw new Error("A non-empty repository source is required.");
             }
 
             if (!["git", "zip", "local"].includes(request.sourceType)) {
-                throw new Error(
-                    `Unsupported source type: ${request.sourceType}`
-                );
+                throw new Error(`Unsupported source type: ${request.sourceType}`);
             }
 
+            for (const key of ["branch", "tag", "commit"] as const)
+                if (request[key] !== undefined && typeof request[key] !== "string")
+                    throw new Error("Invalid Git option");
+            if (request.shallow !== undefined && typeof request.shallow !== "boolean")
+                throw new Error("Invalid shallow option");
             const source = request.source.trim();
 
             if (request.sourceType === "git" && !this.isGitUrl(source)) {
-                throw new Error(
-                    "Invalid Git source. Provide an HTTPS, HTTP, SSH, or Git SSH URL."
-                );
+                throw new Error("Invalid Git source. Provide an HTTPS, HTTP, SSH, or Git SSH URL.");
             }
 
-            console.log("[1/6] Request validated.");
-            console.log(`Source type: ${request.sourceType}`);
-
             // 2. Generate the project ID and name.
-            const projectId = this.generateProjectId();
+            let projectId = this.allocateId();
             const projectName = this.getProjectName(source);
 
-            console.log("[2/6] Project details generated.");
-            console.log(`Project ID: ${projectId}`);
-            console.log(`Project name: ${projectName}`);
-
+            stage = "WORKSPACE_CREATION_FAILED";
             // 3. Create the workspace.
-            workspace = await this.workspaceManager.createWorkspace(projectId);
+            for (let attempt = 0; ; attempt++) {
+                try {
+                    workspace = await this.workspaceManager.createWorkspace(projectId);
+                    break;
+                } catch (error) {
+                    if ((error as NodeJS.ErrnoException).code !== "EEXIST" || attempt >= 9) throw error;
+                    projectId = this.allocateId();
+                }
+            }
             workspaceCreated = true;
 
-            console.log("[3/6] Workspace created.");
-
+            stage = "ACQUISITION_FAILED";
             // 4. Route the source to its importer.
             switch (request.sourceType) {
                 case "git": {
-                    console.log("[4/6] Cloning Git repository...");
-
                     const cloneOptions: Record<string, unknown> = {};
 
                     if (request.branch !== undefined) {
@@ -96,65 +96,45 @@ export class RepositoryImporterService {
                         cloneOptions.shallow = request.shallow;
                     }
 
-                    await this.gitCloner.cloneRepository(
+                    const cloned = await this.gitCloner.cloneRepository(
                         source,
                         workspace.repositoryPath,
-                        cloneOptions as Parameters<
-                            GitClonerService["cloneRepository"]
-                        >[2]
+                        cloneOptions as Parameters<GitClonerService["cloneRepository"]>[2]
                     );
+                    gitInfo = { ...(cloned.branch ? { defaultBranch: cloned.branch } : {}), commitHash: cloned.commit };
                     break;
                 }
 
                 case "zip":
-                    console.log("[4/6] Extracting ZIP archive...");
-
-                    await this.zipExtractor.extractZip(
-                        source,
-                        workspace.repositoryPath
-                    );
+                    await this.zipExtractor.extractZip(source, workspace.repositoryPath);
                     break;
 
                 case "local":
-                    console.log("[4/6] Importing local directory...");
-
-                    await this.localDirectoryImporter.importDirectory(
-                        source,
-                        workspace.repositoryPath
-                    );
+                    await this.localDirectoryImporter.importDirectory(source, workspace.repositoryPath);
                     break;
             }
 
+            await verifyAcquisition(workspace.repositoryPath);
+
+            stage = "VALIDATION_FAILED";
             // 5. Validate the imported repository.
-            console.log("[5/6] Validating repository...");
 
-            const validationReport =
-                await this.repositoryValidator.validateRepository(
-                    workspace.repositoryPath
-                );
+            const validationReport = await this.repositoryValidator.validateRepository(workspace.repositoryPath);
 
-            console.log(`Validation status: ${validationReport.status}`);
-            console.log(`Files found: ${validationReport.totalFiles}`);
-            console.log(`Directories found: ${validationReport.totalDirectories}`);
-            console.log(`Issues found: ${validationReport.issues.length}`);
-
-            // 6. Generate metadata.
-            
             // 6. Generate metadata.
             const metadata = this.repositoryMetadataService.createMetadata(
                 projectId,
                 projectName,
                 request,
-                validationReport
+                validationReport,
+                gitInfo
             );
 
             const validationFailed = validationReport.status === "invalid";
 
             // 7. Detect project technologies only after validation succeeds.
             // Detection is optional: its failure must not fail the import.
-            let projectProfile:
-                Awaited<ReturnType<ProjectDetectionOrchestratorService["detectProject"]>>
-                | undefined;
+            let projectProfile: Awaited<ReturnType<ProjectDetectionOrchestratorService["detectProject"]>> | undefined;
 
             let detectionError: string | undefined;
 
@@ -166,15 +146,9 @@ export class RepositoryImporterService {
                         projectName
                     );
                 } catch (error) {
-                    detectionError =
-                        error instanceof Error
-                            ? error.message
-                            : "Project detection failed.";
-
-                    console.error("Project detection failed:", detectionError);
+                    detectionError = error instanceof Error ? error.message : "Project detection failed.";
                 }
             }
-
 
             const result: RepositoryImportResult = {
                 projectId,
@@ -187,60 +161,49 @@ export class RepositoryImporterService {
                 message: validationFailed
                     ? "Import completed, but repository validation failed."
                     : validationReport.status === "warning"
-                        ? "Repository imported with validation warnings."
-                        : "Repository imported and validated successfully.",
+                      ? "Repository imported with validation warnings."
+                      : "Repository imported and validated successfully.",
                 validation: validationReport,
                 metadata,
                 ...(projectProfile ? { projectProfile } : {}),
-                ...(detectionError ? { detectionError } : {}),
+                ...(detectionError ? { detectionError } : {})
             };
 
             if (validationFailed) {
-                console.error(
-                    "Repository validation failed. Removing the invalid workspace."
-                );
-
                 await this.workspaceManager.deleteWorkspace(projectId);
                 workspaceCreated = false;
             }
 
-            console.log("[6/6] Import workflow finished.");
-            console.log("========== IMPORT RESULT ==========");
-            console.log(JSON.stringify(result, null, 2));
-            console.log("===================================");
-
+            stage = "PROJECT_STORAGE_FAILED";
+            if (!validationFailed)
+                await this.projectStore.save({
+                    schemaVersion: 1,
+                    createdAt: result.importedAt,
+                    updatedAt: result.importedAt,
+                    result,
+                    provenance: {
+                        sourceType: request.sourceType,
+                        source,
+                        ...(request.branch !== undefined ? { branch: request.branch } : {}),
+                        ...(request.tag !== undefined ? { tag: request.tag } : {}),
+                        ...(request.commit !== undefined ? { commit: request.commit } : {}),
+                        ...(request.shallow !== undefined ? { shallow: request.shallow } : {})
+                    }
+                });
             return result;
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : "Unknown import error";
-
-            console.error(`Repository import failed: ${message}`);
-
             // Remove partially imported data if a stage throws.
             if (workspaceCreated && workspace) {
                 try {
-                    await this.workspaceManager.deleteWorkspace(
-                        workspace.projectId
-                    );
-                    console.log("Partial workspace cleaned up.");
+                    await this.workspaceManager.deleteWorkspace(workspace.projectId);
                 } catch (cleanupError) {
                     const cleanupMessage =
-                        cleanupError instanceof Error
-                            ? cleanupError.message
-                            : "Unknown cleanup error";
-
-                    console.error(
-                        `Workspace cleanup failed: ${cleanupMessage}`
-                    );
+                        cleanupError instanceof Error ? cleanupError.message : "Unknown cleanup error";
                 }
             }
 
-            throw new Error(`Repository import failed: ${message}`);
+            throw new RepositoryImportError(stage);
         }
-    }
-
-    private generateProjectId(): string {
-        return `PRJ-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
     }
 
     private getProjectName(source: string): string {
@@ -265,7 +228,9 @@ export class RepositoryImporterService {
 
             return (
                 ["http:", "https:", "ssh:", "git:"].includes(url.protocol) &&
-                Boolean(url.hostname)
+                Boolean(url.hostname) &&
+                !url.password &&
+                (url.protocol === "ssh:" || !url.username)
             );
         } catch {
             return false;

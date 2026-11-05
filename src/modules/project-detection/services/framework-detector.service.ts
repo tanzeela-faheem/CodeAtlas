@@ -1,11 +1,10 @@
-
 import * as fs from "fs";
 import * as path from "path";
 
 import type {
     DetectedFramework,
     FrameworkDetectionResult,
-    FrameworkCategory,
+    FrameworkCategory
 } from "../types/project-detection.types.js";
 
 interface FrameworkRule {
@@ -29,7 +28,7 @@ export class FrameworkDetectorService {
         "__pycache__",
         "target",
         "bin",
-        "obj",
+        "obj"
     ]);
 
     private readonly rules: FrameworkRule[] = [
@@ -37,127 +36,125 @@ export class FrameworkDetectorService {
             name: "Express",
             category: "backend",
             indicators: ["express"],
-            description: "Node.js web application framework",
+            description: "Node.js web application framework"
         },
         {
             name: "NestJS",
             category: "backend",
             indicators: ["@nestjs/core"],
-            description: "Structured Node.js server framework",
+            description: "Structured Node.js server framework"
         },
         {
             name: "Fastify",
             category: "backend",
             indicators: ["fastify"],
-            description: "Node.js web framework",
+            description: "Node.js web framework"
         },
         {
             name: "React",
             category: "frontend",
             indicators: ["react"],
-            description: "JavaScript user-interface library",
+            description: "JavaScript user-interface library"
         },
         {
             name: "Angular",
             category: "frontend",
             indicators: ["@angular/core"],
-            description: "Web application framework",
+            description: "Web application framework"
         },
         {
             name: "Vue",
             category: "frontend",
             indicators: ["vue"],
-            description: "JavaScript user-interface framework",
+            description: "JavaScript user-interface framework"
         },
         {
             name: "Next.js",
             category: "frontend",
             indicators: ["next"],
-            description: "React framework for web applications",
+            description: "React framework for web applications"
         },
         {
             name: "Svelte",
             category: "frontend",
             indicators: ["svelte"],
-            description: "Component-based user-interface framework",
+            description: "Component-based user-interface framework"
         },
         {
             name: "Django",
             category: "backend",
             indicators: ["django"],
-            description: "Python web framework",
+            description: "Python web framework"
         },
         {
             name: "Flask",
             category: "backend",
             indicators: ["flask"],
-            description: "Python web framework",
+            description: "Python web framework"
         },
         {
             name: "FastAPI",
             category: "backend",
             indicators: ["fastapi"],
-            description: "Python API framework",
+            description: "Python API framework"
         },
         {
             name: "Spring Boot",
             category: "backend",
             indicators: ["spring-boot", "spring-boot-starter"],
-            description: "Java application framework",
+            description: "Java application framework"
         },
         {
             name: "Laravel",
             category: "backend",
             indicators: ["laravel/framework"],
-            description: "PHP web application framework",
+            description: "PHP web application framework"
         },
         {
             name: "ASP.NET Core",
             category: "backend",
             indicators: ["microsoft.aspnetcore"],
-            description: "Microsoft web application framework",
+            description: "Microsoft web application framework"
         },
         {
             name: "Electron",
             category: "desktop",
             indicators: ["electron"],
-            description: "Desktop application framework",
+            description: "Desktop application framework"
         },
         {
             name: "Qt",
             category: "desktop",
             indicators: ["qt"],
-            description: "Cross-platform application framework",
+            description: "Cross-platform application framework"
         },
         {
             name: "Unity",
             category: "game",
             indicators: ["unityengine"],
-            description: "Game development engine",
+            description: "Game development engine"
         },
         {
             name: "Jest",
             category: "testing",
             indicators: ["jest"],
-            description: "JavaScript testing framework",
+            description: "JavaScript testing framework"
         },
         {
             name: "Vitest",
             category: "testing",
             indicators: ["vitest"],
-            description: "JavaScript and TypeScript testing framework",
+            description: "JavaScript and TypeScript testing framework"
         },
         {
             name: "Pytest",
             category: "testing",
             indicators: ["pytest"],
-            description: "Python testing framework",
-        },
+            description: "Python testing framework"
+        }
     ];
 
-    async detectFrameworks(
-        repositoryPath: string,
-    ): Promise<FrameworkDetectionResult> {
+    async detectFrameworks(repositoryPath: string): Promise<FrameworkDetectionResult> {
         const root = path.resolve(repositoryPath);
 
         if (!fs.existsSync(root)) {
@@ -197,27 +194,19 @@ export class FrameworkDetectorService {
 
                 for (const indicator of rule.indicators) {
                     if (this.containsIndicator(content, indicator)) {
-                        evidence.add(
-                            `${path.relative(root, file)} contains "${indicator}"`,
-                        );
+                        evidence.add(`${path.relative(root, file)} contains "${indicator}"`);
                     }
                 }
 
                 // Framework-specific configuration file clues.
                 if (
                     rule.name === "Next.js" &&
-                    (fileName === "next.config.js" ||
-                        fileName === "next.config.mjs" ||
-                        fileName === "next.config.ts")
+                    (fileName === "next.config.js" || fileName === "next.config.mjs" || fileName === "next.config.ts")
                 ) {
                     evidence.add(`${path.relative(root, file)} configuration`);
                 }
 
-                if (
-                    rule.name === "Django" &&
-                    fileName === "manage.py" &&
-                    content.includes("django")
-                ) {
+                if (rule.name === "Django" && fileName === "manage.py" && content.includes("django")) {
                     evidence.add(`${path.relative(root, file)} entry point`);
                 }
             }
@@ -240,34 +229,18 @@ export class FrameworkDetectorService {
                 name: rule.name,
                 category: rule.category,
                 confidence: this.calculateConfidence(evidence.size),
-                evidence: [...evidence],
+                evidence: [...evidence]
             });
         }
 
         const result: FrameworkDetectionResult = {
             frameworks,
-            totalDetected: frameworks.length,
+            totalDetected: frameworks.length
         };
 
-        console.log("\n========== FRAMEWORK DETECTION ==========");
-        console.log(`Repository: ${root}`);
-        console.log(`Files inspected: ${files.length}`);
-        console.log(`Frameworks detected: ${result.totalDetected}`);
-
         if (frameworks.length === 0) {
-            console.log("No recognized frameworks detected.");
         } else {
-            console.table(
-                frameworks.map((framework) => ({
-                    name: framework.name,
-                    category: framework.category,
-                    confidence: `${framework.confidence}%`,
-                    evidenceCount: framework.evidence.length,
-                })),
-            );
         }
-
-        console.log("=========================================\n");
 
         return result;
     }
@@ -276,7 +249,7 @@ export class FrameworkDetectorService {
         const results: string[] = [];
 
         const entries = fs.readdirSync(directory, {
-            withFileTypes: true,
+            withFileTypes: true
         });
 
         for (const entry of entries) {
@@ -319,30 +292,17 @@ export class FrameworkDetectorService {
             "next.config.mjs",
             "next.config.ts",
             "pytest.ini",
-            "setup.cfg",
+            "setup.cfg"
         ]);
 
-        return (
-            relevantNames.has(fileName) ||
-            fileName.endsWith(".csproj") ||
-            fileName.endsWith(".fsproj")
-        );
+        return relevantNames.has(fileName) || fileName.endsWith(".csproj") || fileName.endsWith(".fsproj");
     }
 
-    private containsIndicator(
-        content: string,
-        indicator: string,
-    ): boolean {
-        const escaped = indicator.replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&",
-        );
+    private containsIndicator(content: string, indicator: string): boolean {
+        const escaped = indicator.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
         // Match package names without matching arbitrary substrings.
-        const pattern = new RegExp(
-            `(^|[^a-z0-9@._/-])${escaped}([^a-z0-9@._/-]|$)`,
-            "i",
-        );
+        const pattern = new RegExp(`(^|[^a-z0-9@._/-])${escaped}([^a-z0-9@._/-]|$)`, "i");
 
         return pattern.test(content);
     }
