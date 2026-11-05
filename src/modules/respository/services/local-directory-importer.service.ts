@@ -14,7 +14,7 @@ export class LocalDirectoryImporterService {
     constructor(private readonly limits: AcquisitionLimits = DEFAULT_ACQUISITION_LIMITS) {}
 
     // Files/directories that should not be copied
-    private readonly ignoredNames = new Set([".DS_Store", "Thumbs.db", "desktop.ini"]);
+    private readonly ignoredNames = new Set([".DS_Store", "Thumbs.db", "desktop.ini", "node_modules"]);
 
     /**
      * Imports a local project into the CodeAtlas workspace.
