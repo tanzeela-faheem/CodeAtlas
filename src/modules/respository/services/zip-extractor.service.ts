@@ -136,6 +136,15 @@ export class ZipExtractorService {
             return true;
         });
 
+        let declaredBytes = 0;
+        for (const { entry, isDirectory } of included) {
+            if (isDirectory) continue;
+            declaredBytes += entry.uncompressedSize;
+            if (entry.uncompressedSize > this.limits.maxFileBytes || declaredBytes > this.limits.maxBytes) {
+                throw new Error("Archive expansion limit exceeded");
+            }
+        }
+
         // 5. Accept an existing empty extraction directory.
         // The importer owns the workspace.
         await fsp.mkdir(extractionPath, {
@@ -198,7 +207,11 @@ export class ZipExtractorService {
                         actualBytes += chunk.length;
                         totalBytes += chunk.length;
 
-                        if (actualBytes > entry.uncompressedSize || totalBytes > this.limits.maxBytes) {
+                        if (
+                            actualBytes > this.limits.maxFileBytes ||
+                            actualBytes > entry.uncompressedSize ||
+                            totalBytes > this.limits.maxBytes
+                        ) {
                             callback(new Error("Archive expansion limit exceeded"));
                             return;
                         }

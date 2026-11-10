@@ -1,0 +1,1 @@
+import main, {calculate as runCalc, plain} from './math.js'; import * as ns from 'pkg'; export {runCalc as run}; export {remote as renamed} from 'pkg'; export * from 'other'; export * as group from 'pkg'; export default function execute(p) { return runCalc(main(p)) + plain + ns.x; }

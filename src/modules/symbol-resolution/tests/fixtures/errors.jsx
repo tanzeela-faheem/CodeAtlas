@@ -1,0 +1,1 @@
+function good(p) { return p; } function broken( { const x = ; } good(1);

@@ -1,0 +1,1 @@
+const source = {}; const {a: local = source, [source]: key, ...rest} = source; const [first, second = local] = rest; function f({x = first}, [y], ...args) { return x + y + args.length; }

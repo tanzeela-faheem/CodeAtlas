@@ -1,0 +1,1 @@
+const outside = 1; const f = function inner(a = outside, b = a) { var outside = b; return inner(a); }; const C = class Inside { method(p) { return Inside; } }; try { throw outside; } catch ({message: error}) { error; } inner; Inside;

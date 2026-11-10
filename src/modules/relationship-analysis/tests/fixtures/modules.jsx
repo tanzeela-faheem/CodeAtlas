@@ -1,0 +1,1 @@
+import main from './utils.js'; import {value, calculate as run} from 'pkg'; import * as ns from 'other'; import 'side-effect'; export {run as calculate, value}; export function local() {} export const number = 1; export default main; export {remote as renamed} from 'remote'; export * from 'star'; export * as namespace from 'namespace'; run(); main(); ns.member();

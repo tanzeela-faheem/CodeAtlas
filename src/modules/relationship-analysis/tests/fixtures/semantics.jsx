@@ -1,0 +1,1 @@
+function f() {} function body() { f(); } class C { field = f(); [f()]() {} static { f(); } } const object = { [f()]() { f(); } }; function defaults(p = f()) { return p; } const named = function internal() { internal(); };

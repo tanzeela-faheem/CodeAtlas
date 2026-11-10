@@ -1,0 +1,1 @@
+const outer = 1; function f(p) { var x = p; { let outer = x; const y = outer; y; } return outer + x; } f(outer);

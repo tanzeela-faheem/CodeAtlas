@@ -1,0 +1,1 @@
+let local = 1; function f() { ((eval))('var x = 2'); return local + x; }

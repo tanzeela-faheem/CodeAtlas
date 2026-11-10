@@ -1,0 +1,1 @@
+class A { field = seed; constructor(p) { consume(p); } method(q) { function nested(r) { return q + r; } return nested(q); } } function one(x) { return x; } function two(x) { return x; }

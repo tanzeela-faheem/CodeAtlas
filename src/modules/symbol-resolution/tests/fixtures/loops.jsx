@@ -1,0 +1,1 @@
+let x = 1; for (let i = 0; i < x; i++) { i; } i; for (const item of [x]) { item; }

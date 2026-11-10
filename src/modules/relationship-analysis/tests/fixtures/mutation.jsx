@@ -1,0 +1,1 @@
+function changed() {} changed = other; changed(); function stable() {} stable(); class C {} C = other; new C(); function closure() { changed = other; } let count = 0; count++; const read = count; count = read;

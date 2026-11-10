@@ -1,0 +1,1 @@
+const arguments = 1; function f() { const g = () => arguments; return g(); } const h = () => arguments;

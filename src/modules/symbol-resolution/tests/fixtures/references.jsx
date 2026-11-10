@@ -1,0 +1,1 @@
+let value = 1; const obj = {value, key: value, [value]: value}; obj.key; obj[value]; value = obj; value++; label: while (value) { break label; } const view = <Thing prop={value}>{obj.key}</Thing>;

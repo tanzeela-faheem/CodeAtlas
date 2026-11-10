@@ -1,0 +1,1 @@
+function good() { function independent() {} independent(); } good(); function broken( { const value = ; } missing();

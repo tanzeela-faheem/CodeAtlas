@@ -1,0 +1,1 @@
+function outer(p) { { var kept = p; let hidden = kept; hidden; } function nested(q) { return kept + q; } return nested(kept); } class Decl extends Base { [key](p) { return Decl + p; } field = Decl; static { var only = 1; only; } } Decl; only; function repeated(p) { var p; var x; function x() {} return p + x; } let a = 0, b = 0; ({a, b = a} = source);

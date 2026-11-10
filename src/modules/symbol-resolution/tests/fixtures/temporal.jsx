@@ -1,0 +1,1 @@
+x; var x = 1; y; let y = y; const [first = 1, second = first] = []; const closure = () => later; const later = 2; function f(a = hidden) { let hidden = a; return hidden; }

@@ -1,0 +1,1 @@
+var a; var a; let b; let b; function f(a) { let a; return a; } { const b = 1; b; } b;
