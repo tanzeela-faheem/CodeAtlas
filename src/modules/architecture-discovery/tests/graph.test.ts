@@ -1,0 +1,12 @@
+import { expect,it } from 'vitest';
+import { detectCycles,buildDependencies } from '../core/graph.js';
+import type { Dependency } from '../model.js';
+import { Context } from '../core/context.js';
+import { input } from './test-input.js';
+import { fixture } from './test-evidence.js';
+const edge=(from:string,to:string|null,id=from+'-'+to,classification:Dependency['classification']='established'):Dependency=>({id,from,to,classification,kind:'calls',targetStatus:classification==='established'?'established':'deferred',evidenceIds:[]});
+it.each([ [[],0],[[edge('a','b')],0],[[edge('a','a')],1],[[edge('a','b'),edge('b','a')],1],[[edge('a','b'),edge('b','c'),edge('c','a')],1],[[edge('a','b'),edge('b','a'),edge('b','c'),edge('c','b')],1],[[edge('a','a'),edge('b','c'),edge('c','b')],2] ])('SCC detects deterministic self, overlapping and disconnected cycles: %j',(edges,count)=>{const es=edges as Dependency[];const cycles=detectCycles(['a','b','c'],es,'seed');expect(cycles).toHaveLength(count as number);expect(detectCycles(['c','a','b'],[...es].reverse(),'seed')).toEqual(cycles);});
+it('candidate-only edges never produce established cycles',()=>{expect(detectCycles(['a','b'],[edge('a','b','x','candidate'),edge('b','a','y','candidate')],'seed')).toEqual([]);});
+it('large graph is iterative/bounded and rejects invalid targets',()=>{const nodes=Array.from({length:10000},(_,i)=>String(i)),edges=nodes.slice(1).map((n,i)=>edge(nodes[i]!,n));expect(detectCycles(nodes,edges,'seed')).toEqual([]);expect(()=>detectCycles(nodes,edges,'seed',10)).toThrow('ARCHITECTURE_GRAPH_LIMIT');expect(()=>detectCycles(['a'],[edge('a','missing')],'seed')).toThrow();});
+it('native relationship evidence gives local recursion but never a cross-file import endpoint',()=>{const f=fixture('events'),i=input(['events.jsx']);i.files=[f.file];const c=new Context(i);c.initialize();const deps=buildDependencies(c);expect(deps.filter(d=>d.kind==='imports_syntax').every(d=>d.to===null&&d.classification!=='established')).toBe(true);const cycles=detectCycles(c.components.map(c=>c.id),deps,i.provenance);expect(cycles.some(c=>c.selfLoop)).toBe(true);expect(cycles.every(c=>c.scope==='established_local_declarations')).toBe(true);});
+it('graph edge budget and forbidden established-import policy are enforced',()=>{expect(()=>detectCycles(['a'],[edge('a','a')],'seed',1,0)).toThrow('ARCHITECTURE_GRAPH_LIMIT');expect(()=>detectCycles(['a'],[{...edge('a','a'),kind:'imports_syntax'}],'seed')).toThrow('ARCHITECTURE_INPUT_INCOMPATIBLE');});

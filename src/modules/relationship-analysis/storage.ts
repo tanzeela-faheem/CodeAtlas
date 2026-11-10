@@ -13,6 +13,7 @@ export interface RelationshipStore {
     getFile(project: string, analysis: string, artifact: string): Promise<RelationshipDocument>;
     saveAnalysis(summary: RelationshipAnalysis): Promise<void>;
     getAnalysis(project: string, analysis: string): Promise<RelationshipAnalysis>;
+    getAnalysisManifest?(project: string, analysis: string): Promise<RelationshipAnalysis>;
 }
 export class FileRelationshipStore implements RelationshipStore {
     constructor(private readonly workspaces = new WorkspaceManagerService()) {}
@@ -92,6 +93,10 @@ export class FileRelationshipStore implements RelationshipStore {
         }
         await this.referenced(copy);
         await atomicJson(path.join(await this.directory(copy.projectId, copy.analysisId, true), 'summary.json'), envelope);
+    }
+    async getAnalysisManifest(project: string, analysis: string): Promise<RelationshipAnalysis> {
+        try { return await this.summary(project, analysis); }
+        catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') throw error; throw new RelationshipError('RELATIONSHIP_STORAGE_CORRUPT', 500); }
     }
     async getAnalysis(project: string, analysis: string): Promise<RelationshipAnalysis> {
         try { const summary = await this.summary(project, analysis); await this.referenced(summary); return summary; }

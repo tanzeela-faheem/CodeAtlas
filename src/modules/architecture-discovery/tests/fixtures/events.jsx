@@ -1,0 +1,1 @@
+import EventEmitter from 'node:events'; const bus = new EventEmitter(); bus.emit('work'); bus.on('work', () => {}); export function UserController() {} function recursive() { recursive(); } recursive();

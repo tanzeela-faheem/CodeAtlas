@@ -1,0 +1,1 @@
+const custom = {}; custom.emit('work'); custom.on('work', () => {});

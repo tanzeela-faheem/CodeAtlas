@@ -1,0 +1,9 @@
+import type { DiscoveryInput } from "../model.js";
+import { digest } from "../../symbol-resolution/integration/contracts.js";
+export function input(paths: string[] = []): DiscoveryInput {
+    const timestamp = '2026-11-10T00:00:00.000Z';
+    const profile: DiscoveryInput['profile'] = { projectId: 'PRJ-123ABC', projectName: 'Fixture', repositoryPath: '/unused', detectedAt: timestamp,
+        languages: { languages: paths.length ? [{ language:'JavaScript', fileCount:paths.length, linesOfCode:paths.length, percentageOfSourceFiles:100, percentageOfLinesOfCode:100 }] : [], sourceFiles: paths.map(p => ({ absolutePath:'/unused/'+p, relativePath:p, extension:p.slice(p.lastIndexOf('.')), language:'JavaScript', linesOfCode:1, isGenerated:false })), unknownExtensions:[], totalSourceFiles:paths.length,totalLinesOfCode:paths.length,dominantLanguage:paths.length?'JavaScript':null,detectedAt:timestamp },
+        frameworks:{ frameworks:[], totalDetected:0 }, buildSystems:{ buildSystems:[], detectedAt:timestamp }, packageManagers:{ packageManagers:[],detectedAt:timestamp }, structure:{ directories:[],sourceRoots:[],testDirectories:[],resourceDirectories:[],configurationFiles:[],documentationFiles:[],modules:[],totalFiles:paths.length,totalDirectories:0,detectedAt:timestamp }, multiLanguage:{ isMultiLanguage:false,languages:[],segments:[],isMonorepo:false,moduleCount:0,crossLanguageBoundaries:[],detectedAt:timestamp } };
+    return { profile, provenance: { projectId:profile.projectId, analysisId:'AN-00000000-0000-0000-0000-000000000001', sourceAnalysisHash:digest('source'),profileHash:digest('profile'),metadataAnalysisHash:digest('metadata'),resolutionAnalysisHash:digest('resolution'),relationshipAnalysisHash:digest('relationship'),configurationHash:digest({schemaVersion:1,rules:[]}) }, files:[], coverage:paths.map(relativePath=>({relativePath,status:'available',upstreamStatus:'complete',code:null,relationship:null,inputs:null})), diagnostics:[] };
+}
