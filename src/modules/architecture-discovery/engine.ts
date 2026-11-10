@@ -7,7 +7,7 @@ import { detectEvents } from './detectors/events.js';
 import { detectDomains } from './detectors/domains.js';
 import { buildDependencies,detectCycles } from './core/graph.js';
 import { evaluateRules,validateConfiguration } from './core/rules.js';
-import { VERSION,DEFAULT_LIMITS,ArchitectureError,type ArchitectureAnalysis,type DiscoveryInput,type Configuration,type Limits } from './model.js';
+import { VERSION,DEFAULT_LIMITS,ArchitectureError,executionStatus,type ArchitectureAnalysis,type DiscoveryInput,type Configuration,type Limits } from './model.js';
 export function normalizedConfiguration(value:unknown):Configuration{
  validateConfiguration(value);const c=structuredClone(value);c.rules.sort((a,b)=>a.id.localeCompare(b.id));
  for(const r of c.rules){for(const key of ['from','to','selector']as const){const selector=(r as unknown as Record<string,{values:string[]}>)[key];if(selector)selector.values.sort();}const kinds=(r as unknown as {kinds?:string[]}).kinds;kinds?.sort();}
@@ -24,6 +24,6 @@ export function discover(input:DiscoveryInput,configuration:Configuration,limits
  const {evaluations,violations}=evaluateRules(c,dependencies,config);c.checkpoint();
  const diagnostics=[...input.diagnostics,...evaluations.filter(e=>e.limitations.includes('UNSUPPORTED_RULE')).map(e=>({code:'UNSUPPORTED_ARCHITECTURAL_RULE',relativePath:null,message:`Rule ${e.ruleId} has no supported evaluator.`})),{code:'CROSS_FILE_DEPENDENCIES_UNAVAILABLE',relativePath:null,message:'Cycle and rule results cover observed local declaration dependencies only; import specifiers are never linked.'}];
  if(diagnostics.length>limits.maxDiagnostics)throw new ArchitectureError('ARCHITECTURE_RESOURCE_LIMIT',413);
- const doc:ArchitectureAnalysis={schemaVersion:1,analyzerVersion:VERSION,artifactId:resultId(input.provenance),provenance:input.provenance,configuration:config,status:input.coverage.some(f=>f.status!=='available'||f.upstreamStatus!=='complete')||c.findings.some(f=>f.classification!=='established')||evaluations.some(e=>e.status==='indeterminate')?'partial':'complete',coverage:input.coverage,components:c.components,evidence:c.evidence,findings:c.findings,dependencies,cycles,evaluations,violations,diagnostics,cycleCoverage:'observed_local_only'};
+ const doc:ArchitectureAnalysis={schemaVersion:1,analyzerVersion:VERSION,artifactId:resultId(input.provenance),provenance:input.provenance,configuration:config,executionStatus:executionStatus(input.coverage),status:input.coverage.some(f=>f.status!=='available'||f.upstreamStatus!=='complete')||c.findings.some(f=>f.classification!=='established')||evaluations.some(e=>e.status==='indeterminate')?'partial':'complete',coverage:input.coverage,components:c.components,evidence:c.evidence,findings:c.findings,dependencies,cycles,evaluations,violations,diagnostics,cycleCoverage:'observed_local_only'};
  if(Buffer.byteLength(JSON.stringify(doc))>limits.maxBytes)throw new ArchitectureError('ARCHITECTURE_RESOURCE_LIMIT',413);return doc;
 }

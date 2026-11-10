@@ -1,0 +1,1 @@
+function target() {} function outer() { function target() {} target(); } target();

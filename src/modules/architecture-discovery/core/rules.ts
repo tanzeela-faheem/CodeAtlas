@@ -22,8 +22,11 @@ export function evaluateRules(c:RuleContext,dependencies:Dependency[],config:Con
   const r=rule as DependencyRule|CycleRule;const from=select(c,r.type==='forbid_dependency'?r.from:r.selector),to=r.type==='forbid_dependency'?select(c,r.to):from;
   components=[...new Set([...from,...to])].sort();
   const relevant=dependencies.filter(d=>from.has(d.from)&&r.kinds.includes(d.kind));
-  const selectedFiles=new Set(c.components.filter(x=>from.has(x.id)).flatMap(x=>x.files));
-  const incomplete=c.input.coverage.some(f=>selectedFiles.has(f.relativePath)&&f.status!=='available')||c.input.files.some(f=>selectedFiles.has(f.inputs.sourceAst.relativePath)&&(f.inputs.sourceAst.parseStatus!=='success'||f.inputs.metadataArtifact.extractionStatus!=='complete'));
+  const selectors=r.type==='forbid_dependency'?[r.from,r.to]:[r.selector];
+  // Include requested inventory paths even when no semantic entities could be loaded.
+  const selectedFiles=new Set([...c.components.filter(x=>from.has(x.id)||to.has(x.id)).flatMap(x=>x.files),...selectors.flatMap(s=>s.kind==='files'?s.values:[])]);
+  const missingSelection=selectors.some(s=>s.kind==='files'?s.values.some(p=>!c.fileComponents.has(p)):s.kind==='entities'?s.values.some(id=>!c.components.some(x=>x.kind==='entity'&&x.entityId===id)):false);
+  const incomplete=missingSelection||c.input.coverage.some(f=>selectedFiles.has(f.relativePath)&&(f.status!=='available'||f.upstreamStatus!=='complete'))||c.input.files.some(f=>selectedFiles.has(f.inputs.sourceAst.relativePath)&&(f.inputs.sourceAst.parseStatus!=='success'||f.inputs.metadataArtifact.extractionStatus!=='complete'));
   const heuristic=(r.type==='forbid_dependency'?(r.from.kind==='roles'||r.to.kind==='roles'):r.selector.kind==='roles');
   const established=relevant.filter(d=>d.classification==='established'&&!!d.to);
   const prohibited=r.type==='forbid_dependency'?established.filter(d=>to.has(d.to!)):(()=>{const cycles=detectCycles([...from],established.filter(d=>from.has(d.to!)),c.input.provenance,c.limits.maxComponents,c.limits.maxDependencies);const ids=new Set(cycles.flatMap(c=>c.dependencyIds));return established.filter(d=>ids.has(d.id));})();

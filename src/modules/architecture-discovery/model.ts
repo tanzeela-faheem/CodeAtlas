@@ -45,7 +45,12 @@ export interface Coverage { relativePath: string; status: "available" | "unavail
 export interface Provenance { projectId: string; analysisId: string; sourceAnalysisHash: string; profileHash: string; metadataAnalysisHash: string; resolutionAnalysisHash: string; relationshipAnalysisHash: string; configurationHash: string }
 export interface ArchitectureAnalysis {
     schemaVersion: 1; analyzerVersion: typeof VERSION; artifactId: string; provenance: Provenance;
-    configuration: Configuration; status: "complete" | "partial"; coverage: Coverage[];
+    configuration: Configuration;
+    /** Legacy evidence status; partial does not mean that execution failed. */
+    status: "complete" | "partial";
+    /** Optional only for compatibility with previously persisted schema-1 artifacts. */
+    executionStatus?: "completed" | "completed_with_errors";
+    coverage: Coverage[];
     components: Component[]; evidence: Evidence[]; findings: Finding[]; dependencies: Dependency[]; cycles: Cycle[];
     evaluations: Evaluation[]; violations: Violation[]; diagnostics: Diagnostic[];
     cycleCoverage: "observed_local_only";
@@ -55,3 +60,11 @@ export interface DiscoveryInput { profile: ProjectProfile; provenance: Provenanc
 export interface Limits { maxFiles: number; maxEntities: number; maxRelationships: number; maxComponents: number; maxDependencies: number; maxFindings: number; maxDiagnostics: number; maxBytes: number; maxInputBytes: number; maxDurationMs: number }
 export const DEFAULT_LIMITS: Readonly<Limits> = Object.freeze({ maxFiles: 1000, maxEntities: 20000, maxRelationships: 50000, maxComponents: 25000, maxDependencies: 50000, maxFindings: 200, maxDiagnostics: 2000, maxBytes: 16 * 1024 * 1024, maxInputBytes: 128 * 1024 * 1024, maxDurationMs: 60000 });
 export class ArchitectureError extends Error { constructor(readonly code: string, readonly httpStatus = 422) { super(code); } }
+
+/** Returned artifacts exist only after all nine responsibilities have executed successfully.
+ * Missing/invalid supported inputs are execution errors; unsupported languages are coverage limits.
+ * Request failures, detector failures and interruptions throw and never publish an artifact.
+ */
+export function executionStatus(coverage: Coverage[]): NonNullable<ArchitectureAnalysis['executionStatus']> {
+    return coverage.some(f => f.status === 'failed' || f.status === 'unavailable') ? 'completed_with_errors' : 'completed';
+}

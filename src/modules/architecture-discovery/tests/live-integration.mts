@@ -66,7 +66,7 @@ try {
     assert.equal(calls.length, 2); assert.equal(constructions.length, 1);
     assert.equal(relationDocument.relationships.find((r: any) => r.kind === 'imports_syntax').target.symbolId, null);
     assert.deepEqual(await post(`${base}/relationships`), related);
-    const architecture = await post(`${base}/architecture`); assert.equal(architecture.status, 'partial'); assert.equal(architecture.counts.files, 9); assert.equal(architecture.counts.availableFiles, 8);
+    const architecture = await post(`${base}/architecture`); assert.equal(architecture.status, 'partial'); assert.equal(architecture.executionStatus, 'completed'); assert.equal(architecture.counts.files, 9); assert.equal(architecture.counts.availableFiles, 8);
     assert.deepEqual(await (await fetch(`${base}/architecture`)).json(), architecture);
     const discovered = await (await fetch(`${base}/architecture/findings`)).json() as any;
     assert.equal(discovered.findings.length, 7);

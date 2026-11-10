@@ -1,4 +1,4 @@
-import { expect,it } from 'vitest';
+import { expect,it,vi } from 'vitest';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { digest } from '../../symbol-resolution/integration/contracts.js';
@@ -15,6 +15,48 @@ it('isolates metadata failures and mismatched file evidence without claiming abs
 it('rejects missing prerequisites, stale profile content and changed upstream snapshots',async()=>{const s=await setup();try{await expect(s.coordinator.analyze('PRJ-FFFFFF',ANALYSIS)).rejects.toMatchObject({code:'ARCHITECTURE_PROJECT_MISSING'});const d=await s.coordinator.analyze(PROJECT,ANALYSIS);const state=await s.projects.get(PROJECT);state.result.projectProfile!.projectName='Changed profile';await s.projects.save(state);await expect(s.coordinator.analyze(PROJECT,ANALYSIS)).rejects.toMatchObject({code:'ARCHITECTURE_SNAPSHOT_CONFLICT'});state.result.projectProfile!.languages.sourceFiles[0]!.contentHash='a'.repeat(64);await s.projects.save(state);await expect(s.coordinator.analyze(PROJECT,ANALYSIS)).rejects.toThrow('profile content hash');expect(await s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).toEqual(d);}finally{await s.f.cleanup();}});
 it('validates capacity and file/entity/record/component/result/time bounds',async()=>{const s=await setup();try{const first=s.coordinator.analyze(PROJECT,ANALYSIS);await expect(s.coordinator.analyze(PROJECT,ANALYSIS)).rejects.toMatchObject({code:'ARCHITECTURE_BUSY'});await first;}finally{await s.f.cleanup();}for(const policy of[{maxFiles:1},{maxEntities:1},{maxRelationships:1},{maxComponents:1},{maxBytes:1},{maxInputBytes:1},{maxDurationMs:1}]){const s=await setup();try{await expect(new ArchitectureDiscoveryCoordinator(s.projects,s.source,s.relationships,s.resolutions,s.provider,s.store,{...DEFAULT_LIMITS,...policy}).analyze(PROJECT,ANALYSIS)).rejects.toMatchObject({code:policy.maxDurationMs?'ARCHITECTURE_TIME_BUDGET':'ARCHITECTURE_RESOURCE_LIMIT'});}finally{await s.f.cleanup();}}});
 it('immutable publication rejects tampering, corrupt pointers, missing results and valid same-key conflicts',async()=>{const s=await setup();try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS),dir=path.join(s.f.storage,PROJECT,'analysis',ANALYSIS,'architecture'),file=path.join(dir,`${d.artifactId}.architecture.json`),original=await fs.readFile(file,'utf8');await Promise.all([s.store.publish(d),s.store.publish(d)]);const changed=structuredClone(d);changed.diagnostics.push({code:'OTHER',relativePath:null,message:'Different payload'});await expect(s.store.publish(changed)).rejects.toMatchObject({code:'ARCHITECTURE_ARTIFACT_CONFLICT'});const bad=JSON.parse(original);bad.document.diagnostics.push({code:'TAMPER',relativePath:null,message:'changed'});await fs.writeFile(file,JSON.stringify(bad));await expect(s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).rejects.toMatchObject({code:'ARCHITECTURE_STORAGE_CORRUPT'});await fs.writeFile(file,original);await fs.unlink(file);await expect(s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).rejects.toMatchObject({code:'ARCHITECTURE_STORAGE_CORRUPT'});}finally{await s.f.cleanup();}});
-it('unsupported source outcomes remain in inventory and cannot establish semantic absence or rule compliance',async()=>{const s=await setup(true);try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS);expect(d.coverage.every(f=>f.status==='unsupported')).toBe(true);expect(d.components.filter(c=>c.kind==='file')).toHaveLength(5);expect(d.dependencies).toEqual([]);expect(d.findings.find(f=>f.pattern==='event_driven')!.classification).toBe('insufficient_evidence');expect(s.calls.document).toBe(0);}finally{await s.f.cleanup();}});
+it('unsupported source outcomes remain in inventory and cannot establish semantic absence or rule compliance',async()=>{const s=await setup(true);try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS);expect(d.coverage.every(f=>f.status==='unsupported')).toBe(true);expect(d.executionStatus).toBe('completed');expect(d.components.filter(c=>c.kind==='file')).toHaveLength(5);expect(d.dependencies).toEqual([]);expect(d.findings.find(f=>f.pattern==='event_driven')!.classification).toBe('insufficient_evidence');expect(s.calls.document).toBe(0);}finally{await s.f.cleanup();}});
 it('corrupt configuration pointers and tampered semantic claims fail validation without deleting prior artifacts',async()=>{const s=await setup();try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS),dir=path.join(s.f.storage,PROJECT,'analysis',ANALYSIS,'architecture');const pointer=path.join(dir,`${d.provenance.configurationHash}.summary.json`);await fs.writeFile(pointer,'{');await expect(s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).rejects.toMatchObject({code:'ARCHITECTURE_STORAGE_CORRUPT'});const changed=structuredClone(d);changed.findings[0]!.classification='established';expect(()=>validateArchitecture(changed)).toThrow();expect((await fs.readdir(dir)).some(f=>f===`${d.artifactId}.architecture.json`)).toBe(true);}finally{await s.f.cleanup();}});
-it('unavailable metadata is explicit per-file coverage and cannot hide as a valid architecture result',async()=>{const s=await setup();try{const {ResolutionError}=await import('../../symbol-resolution/model.js');const provider={...s.provider,document:async()=>{throw new ResolutionError('METADATA_UNAVAILABLE',503);}};const d=await new ArchitectureDiscoveryCoordinator(s.projects,s.source,s.relationships,s.resolutions,provider,s.store).analyze(PROJECT,ANALYSIS);expect(d.coverage.every(f=>f.status==='unavailable'&&f.code==='METADATA_UNAVAILABLE')).toBe(true);expect(d.findings.every(f=>f.classification!=='established')).toBe(true);}finally{await s.f.cleanup();}});
+it('unavailable metadata is explicit per-file coverage and cannot hide as a valid architecture result',async()=>{const s=await setup();try{const {ResolutionError}=await import('../../symbol-resolution/model.js');const provider={...s.provider,document:async()=>{throw new ResolutionError('METADATA_UNAVAILABLE',503);}};const d=await new ArchitectureDiscoveryCoordinator(s.projects,s.source,s.relationships,s.resolutions,provider,s.store).analyze(PROJECT,ANALYSIS);expect(d.coverage.every(f=>f.status==='unavailable'&&f.code==='METADATA_UNAVAILABLE')).toBe(true);expect(d.executionStatus).toBe('completed_with_errors');expect(d.findings.every(f=>f.classification!=='established')).toBe(true);}finally{await s.f.cleanup();}});
+it('execution completion is independent of heuristic evidence, and legacy schema-1 results remain readable',async()=>{
+ const s=await setup();try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS);expect(d.executionStatus).toBe('completed');expect(d.status).toBe('partial');
+ const legacy=structuredClone(d);delete legacy.executionStatus;expect(()=>validateArchitecture(legacy)).not.toThrow();
+ const bad=structuredClone(d);bad.executionStatus='completed_with_errors';expect(()=>validateArchitecture(bad)).toThrow('execution status');
+ }finally{await s.f.cleanup();}
+});
+it('rechecks persisted rule semantics even when forged evaluation IDs and envelope checksums are internally valid',async()=>{
+ const s=await setup();try{
+ const d=await s.coordinator.analyze(PROJECT,ANALYSIS,{schemaVersion:1,rules:[{id:'no_recursion',type:'forbid_cycles',selector:{kind:'files',values:['events.jsx']},kinds:['calls'],severity:'warning',scope:'observed_local',evidence:'established_only'}]});
+ const {stableId}=await import('../core/context.js');const bad=structuredClone(d),e=bad.evaluations[0]!;e.status='pass';const {id:_,...data}=e;e.id=stableId('ar',bad.provenance,data);bad.violations=[];
+ expect(()=>validateArchitecture(bad)).toThrow('rule semantics');
+ const dir=path.join(s.f.storage,PROJECT,'analysis',ANALYSIS,'architecture'),hash=digest(bad),pointer={schemaVersion:1,projectId:PROJECT,analysisId:ANALYSIS,configurationHash:d.provenance.configurationHash,artifactId:d.artifactId,documentHash:hash};
+ await fs.writeFile(path.join(dir,`${d.artifactId}.architecture.json`),JSON.stringify({documentHash:hash,document:bad}));await fs.writeFile(path.join(dir,`${d.provenance.configurationHash}.summary.json`),JSON.stringify({documentHash:digest(pointer),pointer}));
+ await expect(s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).rejects.toMatchObject({code:'ARCHITECTURE_STORAGE_CORRUPT'});
+ }finally{await s.f.cleanup();}
+});
+it('failed pointer publication exposes no analysis and an immutable orphan can be retried',async()=>{
+ const s=await setup();try{
+ const d=await s.coordinator.analyze(PROJECT,ANALYSIS),dir=path.join(s.f.storage,PROJECT,'analysis',ANALYSIS,'architecture'),pointer=path.join(dir,`${d.provenance.configurationHash}.summary.json`);
+ await fs.unlink(pointer);
+ const link=fs.link.bind(fs),publication=vi.spyOn(fs,'link').mockImplementation(async(from,to)=>{if(String(to)===pointer)throw new Error('Injected pointer publication failure');return link(from,to);});
+ try{await expect(s.store.publish(d)).rejects.toThrow('Injected pointer publication failure');}finally{publication.mockRestore();}
+ expect(await fs.stat(path.join(dir,`${d.artifactId}.architecture.json`))).toBeTruthy();await expect(s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).rejects.toMatchObject({code:'ENOENT'});
+ await s.store.publish(d);expect(await new FileArchitectureStore(s.workspaces).get(PROJECT,ANALYSIS,d.provenance.configurationHash)).toEqual(d);
+ }finally{await s.f.cleanup();}
+});
+it('rejects a persisted dependency rewired to a different declaration despite recomputed IDs and SCCs',async()=>{
+ const s=await setup();try{
+ const d=await s.coordinator.analyze(PROJECT,ANALYSIS),bad=structuredClone(d),dependency=bad.dependencies.find(d=>d.classification==='established')!;
+ const other=bad.components.find(c=>c.kind==='entity'&&c.id!==dependency.from&&c.files[0]===bad.components.find(c=>c.id===dependency.from)!.files[0])!;
+ const {stableId}=await import('../core/context.js'),{detectCycles}=await import('../core/graph.js');dependency.from=other.id;
+ const {id:_,...data}=dependency;dependency.id=stableId('ad',bad.provenance,[bad.evidence.find(e=>e.id===dependency.evidenceIds[0])!.relationshipId,data]);
+ bad.cycles=detectCycles(bad.components.map(c=>c.id),bad.dependencies,bad.provenance);
+ expect(()=>validateArchitecture(bad)).toThrow('dependency source evidence');
+ }finally{await s.f.cleanup();}
+});
+it('known configuration-path changes and newer profile snapshots cannot reuse cached architecture',async()=>{
+ const s=await setup();try{const d=await s.coordinator.analyze(PROJECT,ANALYSIS),state=await s.projects.get(PROJECT),original=structuredClone(state);
+ state.result.projectProfile!.structure.configurationFiles.push('changed.config.js');await s.projects.save(state);await expect(s.coordinator.analyze(PROJECT,ANALYSIS)).rejects.toMatchObject({code:'ARCHITECTURE_SNAPSHOT_CONFLICT'});
+ original.result.projectProfile!.detectedAt='2099-01-01T00:00:00.000Z';await s.projects.save(original);await expect(s.coordinator.analyze(PROJECT,ANALYSIS)).rejects.toThrow('profile newer than source analysis');expect(await s.store.get(PROJECT,ANALYSIS,d.provenance.configurationHash)).toEqual(d);
+ }finally{await s.f.cleanup();}
+});
