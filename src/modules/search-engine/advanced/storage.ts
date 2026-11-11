@@ -1,0 +1,12 @@
+import * as v from '../../../shared/validation.js';
+import { digest } from '../../symbol-resolution/integration/contracts.js';
+import { SearchArtifactFiles } from '../storage.js';
+import { SearchError } from '../model.js';
+import { ADVANCED_VERSION,type AdvancedIndex } from './model.js';
+import { identity,validateAdvanced } from './validation.js';
+/** Sidecar publication never changes the Phase 1 pointer or artifacts. */
+export class FileAdvancedIndexStore extends SearchArtifactFiles {
+ async publish(raw:AdvancedIndex){const index=v.validatedSnapshot(raw,validateAdvanced),dir=await this.directory(index.projectId,index.analysisId,true);const pointer={schemaVersion:2,projectId:index.projectId,analysisId:index.analysisId,indexId:index.indexId,documentHash:digest(index)};await this.immutable(dir,`${index.indexId}.search-v2.json`,{documentHash:digest(index),index});await this.immutable(dir,'summary-v2.json',{documentHash:digest(pointer),pointer});}
+ async get(project:string,analysis:string):Promise<AdvancedIndex>{v.projectId(project);v.analysisId(analysis);let pointerRead=false;try{const dir=await this.directory(project,analysis),envelope=v.object(await this.read(dir,'summary-v2.json'),'advanced envelope',['documentHash','pointer']);pointerRead=true;const p=v.object(envelope.pointer,'advanced pointer',['schemaVersion','projectId','analysisId','indexId','documentHash']);identity(p.indexId,'sx');v.hash(p.documentHash);v.hash(envelope.documentHash);v.check(p.schemaVersion===2&&p.projectId===project&&p.analysisId===analysis&&digest(p)===envelope.documentHash,'advanced pointer ownership');const result=v.object(await this.read(dir,`${p.indexId}.search-v2.json`),'advanced artifact',['documentHash','index']);const version=(result.index as AdvancedIndex)?.builderVersion;if(typeof version==='string'&&version!==ADVANCED_VERSION)throw new SearchError('SEARCH_V2_VERSION_INCOMPATIBLE',409);validateAdvanced(result.index);v.check(digest(result.index)===p.documentHash&&result.documentHash===p.documentHash&&result.index.indexId===p.indexId&&result.index.projectId===project&&result.index.analysisId===analysis,'advanced checksum');return result.index;
+ }catch(e){if(e instanceof SearchError&&e.code==='SEARCH_V2_VERSION_INCOMPATIBLE')throw e;if(!pointerRead&&(e as NodeJS.ErrnoException).code==='ENOENT')throw new SearchError('SEARCH_V2_INDEX_MISSING',404);throw new SearchError('SEARCH_V2_STORAGE_CORRUPT',500);}}
+}
