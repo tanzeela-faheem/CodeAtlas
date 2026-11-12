@@ -11,6 +11,8 @@ import { graphRoutes } from "./modules/knowledge-graph/routes.js";
 import { projectRoutes } from "./modules/respository/project-routes.js";
 import {sourceRoutes} from "./modules/analysis/source-routes.js";
 import { searchRoutes } from "./modules/search-engine/routes.js";
+import { contextRoutes } from "./modules/ai-context/routes.js";
+import { reasoningRoutes } from "./modules/ai-reasoning/routes.js";
 export function createApp(workspaces = new WorkspaceManagerService()) {
     const app = express();
     app.use(express.json({ limit: "128kb" }));
@@ -23,6 +25,8 @@ export function createApp(workspaces = new WorkspaceManagerService()) {
     app.use("/api/projects", architectureRoutes(workspaces));
     app.use("/api/projects", graphRoutes(workspaces));
     app.use("/api/projects", searchRoutes(workspaces));
+    app.use("/api/projects", contextRoutes(workspaces));
+    app.use("/api/projects", reasoningRoutes(workspaces));
     app.use((_error: unknown, _req: Request, res: Response, _next: NextFunction) => {
         res.status(400).json({ code: "INVALID_REQUEST" });
     });

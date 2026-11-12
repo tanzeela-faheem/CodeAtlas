@@ -28,6 +28,8 @@ export class AnalysisCoordinator {
     async start(projectId: string): Promise<AnalysisSummary> {
         if (this.active) throw new Error("ANALYSIS_BUSY");
         this.active = true;
+        let reservedId: string | undefined;
+        let settle: (() => void) | undefined;
 
         try {
             const project = await this.projects.get(projectId);
@@ -53,11 +55,17 @@ export class AnalysisCoordinator {
                 files: []
             };
 
+            // Reserve before queued publication: a status reader must never mistake
+            // this accepted/publishing job for an orphan from a previous process.
+            const completion = new Promise<void>((resolve) => { settle = resolve; });
+            reservedId = summary.analysisId;
+            this.tasks.set(summary.analysisId, completion);
             await this.summaries.save(summary);
+            const accepted = structuredClone(summary);
 
-            const task = (async () => {
-                await yieldToLoop();
+            void (async () => {
                 try {
+                    await yieldToLoop();
                     await this.process(summary, profile);
                 } catch {
                     summary.status = "failed";
@@ -71,13 +79,15 @@ export class AnalysisCoordinator {
                 } finally {
                     this.active = false;
                     this.tasks.delete(summary.analysisId);
+                    settle!();
                 }
             })();
 
-            this.tasks.set(summary.analysisId, task);
-            return structuredClone(summary);
+            return accepted;
         } catch (error) {
             this.active = false;
+            if (reservedId) this.tasks.delete(reservedId);
+            settle?.();
             throw error;
         }
     }
@@ -87,13 +97,30 @@ export class AnalysisCoordinator {
     }
 
     async get(projectId: string, analysisId: string): Promise<AnalysisSummary> {
-        const summary = await this.summaries.get(projectId, analysisId);
+        let summary = await this.summaries.get(projectId, analysisId);
+        const inProgress = (value: AnalysisSummary) => ["queued", "running"].includes(value.status);
 
-        if (["queued", "running"].includes(summary.status) && !this.tasks.has(analysisId)) {
-            summary.status = "interrupted";
-            summary.failureCode = "PROCESS_RESTARTED";
-            summary.completedAt = new Date().toISOString();
-            await this.summaries.save(summary);
+        if (!inProgress(summary)) {
+            // Rename can expose a terminal file before save()/finally completes.
+            // Only advertise completion after this job has released its ownership.
+            const task = this.tasks.get(analysisId);
+            if (task) {
+                await task;
+                summary = await this.summaries.get(projectId, analysisId);
+            }
+        }
+
+        if (inProgress(summary) && !this.tasks.has(analysisId)) {
+            // The first disk read may have captured running immediately before the
+            // job completed. Re-read after observing no owner before recovering an
+            // orphan; otherwise a stale read can overwrite valid terminal evidence.
+            summary = await this.summaries.get(projectId, analysisId);
+            if (inProgress(summary) && !this.tasks.has(analysisId)) {
+                summary.status = "interrupted";
+                summary.failureCode = "PROCESS_RESTARTED";
+                summary.completedAt = new Date().toISOString();
+                await this.summaries.save(summary);
+            }
         }
 
         return summary;

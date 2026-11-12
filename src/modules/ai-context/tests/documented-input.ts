@@ -1,0 +1,20 @@
+import {readFileSync} from 'node:fs';
+import {graphInput} from '../../knowledge-graph/tests/test-input.js';
+import {deserializeAst} from '../../ast-management/serializer.js';
+import {reference as astReference} from '../../ast-management/identity.js';
+import {digest} from '../../symbol-resolution/integration/contracts.js';
+import {resolutionReference} from '../../symbol-resolution/validation.js';
+import {JavascriptRelationshipAnalyzer} from '../../relationship-analysis/languages/javascript.js';
+import {reference as relationshipReference} from '../../relationship-analysis/validation.js';
+import {emptyCounts} from '../../analysis/model.js';
+import {emptyFileCounts,emptyRelationshipCounts} from '../../relationship-analysis/model.js';
+import {addCounts} from '../../relationship-analysis/validation.js';
+import type {MetadataDocument,MetadataReference,ResolutionDocument} from '../../symbol-resolution/model.js';
+export function documentedInput(){const input=graphInput(true),read=(name:string)=>JSON.parse(readFileSync(new URL('./fixtures/'+name,import.meta.url),'utf8')),ast=deserializeAst(readFileSync(new URL('./fixtures/notes.ast.json',import.meta.url),'utf8')),metadata=read('notes.metadata.json') as MetadataDocument,ref=read('notes.reference.json') as MetadataReference,resolution=read('notes.resolution.json') as ResolutionDocument;
+ const source={...input.source,status:'completed' as const,files:[{relativePath:ast.relativePath,status:'parsed' as const,artifact:astReference(ast)}],counts:{...emptyCounts(),parsed:1}};
+ const m={...input.metadataAnalysis,sourceAnalysis:source,sourceAnalysisHash:digest(source),status:metadata.extractionStatus,files:[{relativePath:ast.relativePath,upstreamStatus:'parsed',status:metadata.extractionStatus,sourceArtifact:astReference(ast),metadataArtifact:ref,diagnostics:[]}],entityCounts:metadata.summary,outcomeCounts:{[metadata.extractionStatus]:1},diagnostics:[]};
+ const r={...input.resolutionAnalysis,sourceAnalysisHash:digest(source),metadataAnalysisHash:digest(m),upstreamStatus:m.status,status:resolution.status,files:[{relativePath:ast.relativePath,status:resolution.status,artifact:resolutionReference(resolution),code:null,upstreamDiagnostics:[]}],counts:{complete:0,partial:0,unavailable:0,unsupported:0,failed:0},upstreamDiagnostics:[]};r.counts[resolution.status]++;
+ const relationships=new JavascriptRelationshipAnalyzer().analyze({ast,metadata,resolution,resolutionArtifact:resolutionReference(resolution),sourceAnalysisHash:digest(source),metadataAnalysisHash:digest(m),resolutionAnalysisHash:digest(r)});
+ const a={...input.relationshipAnalysis,sourceAnalysisHash:digest(source),metadataAnalysisHash:digest(m),resolutionAnalysisHash:digest(r),upstreamStatus:r.status,status:relationships.status,upstreamDiagnostics:[],files:[{relativePath:ast.relativePath,status:relationships.status,code:null,artifact:relationshipReference(relationships),upstreamStatus:r.status,upstreamCode:null,upstreamDiagnostics:[]}],counts:emptyFileCounts(),relationshipCounts:emptyRelationshipCounts()};a.counts[relationships.status]++;addCounts(a.relationshipCounts,relationships.counts);
+ return {source,metadataAnalysis:m,resolutionAnalysis:r,relationshipAnalysis:a,files:[{ast,metadata,resolution,relationships}],gaps:[]};
+}

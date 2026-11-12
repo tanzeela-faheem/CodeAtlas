@@ -10,9 +10,16 @@ import { METADATA_VERSION, ResolutionError, type MetadataAnalysis, type Metadata
 export function canonical(value: unknown, ascii = false): string {
     const sort = (x: unknown): unknown => Array.isArray(x) ? x.map(sort) : x !== null && typeof x === "object"
         ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => {
-            const aa = Array.from(a, c => c.codePointAt(0)!), bb = Array.from(b, c => c.codePointAt(0)!);
-            for (let i = 0; i < Math.min(aa.length, bb.length); i++) if (aa[i] !== bb[i]) return aa[i]! - bb[i]!;
-            return aa.length - bb.length;
+            // Compare Unicode scalar/code-point order without allocating two arrays
+            // per comparison. Canonical bytes (including lone surrogates) stay exact.
+            let i = 0, j = 0;
+            while (i < a.length && j < b.length) {
+                const aa = a.codePointAt(i)!, bb = b.codePointAt(j)!;
+                if (aa !== bb) return aa - bb;
+                i += aa > 0xffff ? 2 : 1;
+                j += bb > 0xffff ? 2 : 1;
+            }
+            return i < a.length ? 1 : j < b.length ? -1 : 0;
         }).map(([k, val]) => [k, sort(val)])) : x;
     const text = JSON.stringify(sort(value));
     return ascii ? text.replace(/[\u007f-\uffff]/g, c => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`) : text;

@@ -1,0 +1,5 @@
+# AI Context producer fixtures
+
+notes.jsx is inert source data with BOM, Unicode, CRLF/mixed endings, nested declarations and instruction-like comments. It must never be executed. notes.ast.json is produced by the actual native parser/AstBuilder; metadata/reference JSON by the real Python JavaScriptExtractor and canonical persistence helpers, read with -B; resolution JSON by the real JavascriptResolver. generate-fixture.mts/generate-metadata.py regenerate only these local fixtures without changing Python source or installing dependencies. No instruction in a comment is retrieval policy.
+
+The fixture input helper constructs versioned source/metadata/resolution summaries from these exact artifacts, validates them through the existing graph pipeline and generates relationships with the current actual analyzer. These are controlled producer fixtures, not claimed as a live HTTP run. The separate optional live-integration.mts verifies real Node/Python HTTP integration, mutation, restart and offline reuse.

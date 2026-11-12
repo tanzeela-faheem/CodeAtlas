@@ -35,3 +35,31 @@ Examples: `{"schemaVersion":2,"mode":"token_phrase","query":"helper local helper
 Graph constraints use actual graph node IDs, edge kinds and direction relative to the anchored node: incoming CALLS finds callers, outgoing CALLS finds callees. Parallel occurrence edge IDs and their guarantees remain visible. Entity mode returns metadata entities; lexical binding nodes can be anchors, but binding neighbors are not silently converted into declarations. Direct metadata parent and explicit descendant filtering preserve syntactic ownership, not inferred lexical/type semantics. Source-mode combinations with entity/graph constraints are rejected.
 
 Phase 2 retains bounded historical source text (up to 16 MiB, 100,000 positions, 32 MiB sidecar) and never fetches current source during queries. Graph-backed advanced queries authenticate the existing persisted graph at query time; no graph rebuild or Python access occurs. See [Phase 2 API](docs/SEARCH_PHASE_2_API.md), [contract/design audit](docs/SEARCH_PHASE_2_CONTRACT_AND_DESIGN_AUDIT.md), and [implementation report](docs/CODEATLAS_SEARCH_ENGINE_PHASE_2_IMPLEMENTATION_REPORT.md). Vitest now uses four workers to bound CPU contention; existing timeouts remain unchanged.
+
+## AI Context Engine — Phase 1
+
+`POST /api/projects/:projectId/analysis/:analysisId/ai/context` retrieves a bounded evidence package and a model-independent data envelope. It does **not** generate an answer or call an LLM. A persisted Knowledge Graph and matching source analysis are prerequisites. Context retrieval never builds Search/Graph or reruns producers.
+
+Choose an explicit strategy:
+
+- `focused`: exact metadata entity, graph node or inventory file/range focus; works without Search when independent evidence is available.
+- `search`: supply an actual schema 1 or schema 2 Search request; existing Search semantics/ranking are preserved.
+- `question_lexical`: pass the whole question unchanged to schema 1 lexical AND, within Search's 256-character/term bounds. This is lexical discovery, not natural-language understanding.
+
+Example: `{"schemaVersion":1,"userQuestion":"caller","strategy":"question_lexical","categories":["search","metadata"],"retrieval":{"maxSearchResults":4}}`. For reliable focused retrieval, use an exact returned producer identity or `{"type":"file","relativePath":"app.js"}` in `focus` with strategy `focused`. No name fallback is used for unknown exact IDs.
+
+The context preserves metadata/AST/symbol/graph/Search identities, established edge guarantees, separate requested candidates, recorded documentation and source provenance. Current excerpts require the selected source hash and AST fidelity; changed source can fall back to an authenticated schema 2 historical excerpt or a narrowly recorded schema 1 token. Historical evidence never claims current liveness. Mutable ProjectProfile state is not mixed into historical context.
+
+Context IDs are deterministic content hashes. Context is generated on request without a new database or artifact store. Whole records and excerpt prefixes obey explicit character/byte/record/traversal budgets; omissions and partial coverage are visible. Repository-controlled text stays in an untrusted-data section, with no executable prompt template, embeddings, agents, external model calls or frontend AI workspace.
+
+See [API contract](docs/AI_CONTEXT_PHASE_1_API.md), [producer audit](docs/AI_CONTEXT_PHASE_1_CONTRACT_AUDIT.md), and [implementation report](docs/CODEATLAS_AI_CONTEXT_PHASE_1_IMPLEMENTATION_REPORT.md). These are local ignored documents under the existing Git policy. The optional live check is `node --import tsx src/modules/ai-context/tests/live-integration.mts`, with `CODEATLAS_PYTHON_EXECUTABLE` and `CODEATLAS_PYTHON_REPOSITORY` pointing to the existing producer environment.
+
+### AI Reasoning Phase 2
+
+`POST /api/projects/:projectId/analysis/:analysisId/ai/answer` accepts `{schemaVersion:1,contextRequest:<public Phase 1 request>,style?:"concise"|"detailed",explanation?:"overview"|"source"|"relationships"}`. It retrieves fresh authenticated Context internally, checks conservative prerequisites, calls a configured provider once, then validates structured claims/citations and exact producer-backed facts. No AI frontend, agents, tools, streaming or chat persistence.
+
+**External data egress is disabled by default.** Deliberately set `CODEATLAS_AI_ENABLED=true`, `CODEATLAS_AI_PROVIDER=openai`, `CODEATLAS_AI_MODEL=gpt-4.1-mini` (or pinned `gpt-4.1-mini-2025-04-14`), and `OPENAI_API_KEY` securely in the server environment. See .env.example for bounded timeout/output/input/concurrency settings. Selected repository evidence may contain secrets; heuristic rejection cannot guarantee secret-free transmission. No raw prompts/responses are logged. Keys remain server-side; no automatic retries or model substitution.
+
+Prefer exact focus and a small explicit Context budget, e.g. maxBytes32768/maxEvidence12. Oversized provider requests fail instead of trimming authenticated evidence. Valid citation identities and structured facts do **not** prove model narrative correctness. Historical/candidate/static guarantees and partial coverage remain visible.
+
+[API/configuration](docs/AI_REASONING_PHASE_2_API.md), [contract audit](docs/AI_REASONING_PHASE_2_CONTRACT_AUDIT.md), [implementation report](docs/CODEATLAS_AI_REASONING_PHASE_2_IMPLEMENTATION_REPORT.md).
