@@ -1,0 +1,3290 @@
+{
+  "input": {
+    "source": {
+      "schemaVersion": 1,
+      "projectId": "PRJ-123ABC",
+      "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+      "status": "completed",
+      "startedAt": "2026-11-12T00:00:00.000Z",
+      "completedAt": "2026-11-12T00:00:01.000Z",
+      "counts": {
+        "parsed": 3,
+        "syntax_errors": 0,
+        "unsupported": 1,
+        "skipped": 0,
+        "read_failed": 0,
+        "parser_failed": 0,
+        "ast_failed": 0,
+        "storage_failed": 0
+      },
+      "files": [
+        {
+          "relativePath": "consumer.jsx",
+          "status": "parsed",
+          "artifact": {
+            "artifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "schemaVersion": 1,
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "core.js",
+          "status": "parsed",
+          "artifact": {
+            "artifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "schemaVersion": 1,
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "second.js",
+          "status": "parsed",
+          "artifact": {
+            "artifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "schemaVersion": 1,
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "unsupported.ts",
+          "status": "unsupported",
+          "code": "UNSUPPORTED_LANGUAGE_OR_EXTENSION"
+        }
+      ]
+    },
+    "resolution": {
+      "schemaVersion": 1,
+      "resolverVersion": "javascript-lexical-v1",
+      "projectId": "PRJ-123ABC",
+      "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+      "metadataAnalysisHash": "fedd5a64f27c8fc0db75dad3a7f5be963f673e37079a3b44a4232ded02cbf51c",
+      "sourceAnalysisHash": "2d1cfc85ea20c0672e1693bc437e858379ab063102bd8d9935a9c21f26c0702c",
+      "extractionVersion": "project-metadata-v1/javascript-syntax-v1",
+      "upstreamStatus": "partial",
+      "upstreamDiagnostics": [],
+      "status": "partial",
+      "startedAt": "2026-11-12T00:00:02.000Z",
+      "completedAt": "2026-11-12T00:00:03.000Z",
+      "files": [
+        {
+          "relativePath": "consumer.jsx",
+          "status": "complete",
+          "code": null,
+          "artifact": {
+            "artifactId": "42392dd1b2f1ac4cf77f07e5660a97ab405fe955e54eda535cccacf458813936",
+            "documentHash": "2fe06fb5eec6d117d98e763f66749e06a44dc2b2b43944ee95fa431827cccba5",
+            "relativePath": "consumer.jsx"
+          },
+          "upstreamDiagnostics": []
+        },
+        {
+          "relativePath": "core.js",
+          "status": "complete",
+          "code": null,
+          "artifact": {
+            "artifactId": "967fa2ac47e72621afb3ff32d85d70f893ca835d388f7208a0152dd78e2d4a1f",
+            "documentHash": "4066bc07e1441e40c2185aef0417db7b1e9b488693cfa1d9bdf5c2cf3f7fa5cf",
+            "relativePath": "core.js"
+          },
+          "upstreamDiagnostics": []
+        },
+        {
+          "relativePath": "second.js",
+          "status": "complete",
+          "code": null,
+          "artifact": {
+            "artifactId": "a2d255d1e553028f0743c19956878073ed34f732aec66f0499ab56d80fb28292",
+            "documentHash": "af65c2bdb5b31a5da1c68d09ce8a0e30989aa19cc15b15c977e9ac928a5c0423",
+            "relativePath": "second.js"
+          },
+          "upstreamDiagnostics": []
+        },
+        {
+          "relativePath": "unsupported.ts",
+          "status": "unsupported",
+          "code": "UNSUPPORTED_LANGUAGE",
+          "artifact": null,
+          "upstreamDiagnostics": []
+        }
+      ],
+      "counts": {
+        "complete": 3,
+        "partial": 0,
+        "unavailable": 0,
+        "unsupported": 1,
+        "failed": 0
+      }
+    },
+    "files": [
+      {
+        "relativePath": "consumer.jsx",
+        "ast": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "consumer.jsx",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "nodes": [
+            {
+              "id": "n0",
+              "type": "program",
+              "parentId": null,
+              "fieldName": null,
+              "children": [
+                "n1",
+                "n17",
+                "n24"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            },
+            {
+              "id": "n1",
+              "type": "import_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n2",
+                "n3",
+                "n11",
+                "n12",
+                "n16"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            {
+              "id": "n2",
+              "type": "import",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": "import",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 6,
+                "row": 0,
+                "column": 6
+              }
+            },
+            {
+              "id": "n3",
+              "type": "import_clause",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [
+                "n4"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 19,
+                "row": 0,
+                "column": 19
+              }
+            },
+            {
+              "id": "n4",
+              "type": "named_imports",
+              "parentId": "n3",
+              "fieldName": null,
+              "children": [
+                "n5",
+                "n6",
+                "n10"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 19,
+                "row": 0,
+                "column": 19
+              }
+            },
+            {
+              "id": "n5",
+              "type": "{",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [],
+              "text": "{",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              }
+            },
+            {
+              "id": "n6",
+              "type": "import_specifier",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [
+                "n7",
+                "n8",
+                "n9"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              }
+            },
+            {
+              "id": "n7",
+              "type": "identifier",
+              "parentId": "n6",
+              "fieldName": "name",
+              "children": [],
+              "text": "add",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 11,
+                "row": 0,
+                "column": 11
+              }
+            },
+            {
+              "id": "n8",
+              "type": "as",
+              "parentId": "n6",
+              "fieldName": null,
+              "children": [],
+              "text": "as",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 12,
+                "row": 0,
+                "column": 12
+              },
+              "end": {
+                "offset": 14,
+                "row": 0,
+                "column": 14
+              }
+            },
+            {
+              "id": "n9",
+              "type": "identifier",
+              "parentId": "n6",
+              "fieldName": "alias",
+              "children": [],
+              "text": "sum",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 15,
+                "row": 0,
+                "column": 15
+              },
+              "end": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              }
+            },
+            {
+              "id": "n10",
+              "type": "}",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [],
+              "text": "}",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              },
+              "end": {
+                "offset": 19,
+                "row": 0,
+                "column": 19
+              }
+            },
+            {
+              "id": "n11",
+              "type": "from",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": "from",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 20,
+                "row": 0,
+                "column": 20
+              },
+              "end": {
+                "offset": 24,
+                "row": 0,
+                "column": 24
+              }
+            },
+            {
+              "id": "n12",
+              "type": "string",
+              "parentId": "n1",
+              "fieldName": "source",
+              "children": [
+                "n13",
+                "n14",
+                "n15"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 25,
+                "row": 0,
+                "column": 25
+              },
+              "end": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              }
+            },
+            {
+              "id": "n13",
+              "type": "\"",
+              "parentId": "n12",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 25,
+                "row": 0,
+                "column": 25
+              },
+              "end": {
+                "offset": 26,
+                "row": 0,
+                "column": 26
+              }
+            },
+            {
+              "id": "n14",
+              "type": "string_fragment",
+              "parentId": "n12",
+              "fieldName": null,
+              "children": [],
+              "text": "./core.js",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 26,
+                "row": 0,
+                "column": 26
+              },
+              "end": {
+                "offset": 35,
+                "row": 0,
+                "column": 35
+              }
+            },
+            {
+              "id": "n15",
+              "type": "\"",
+              "parentId": "n12",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 35,
+                "row": 0,
+                "column": 35
+              },
+              "end": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              }
+            },
+            {
+              "id": "n16",
+              "type": ";",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            {
+              "id": "n17",
+              "type": "expression_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n18",
+                "n23"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 38,
+                "row": 0,
+                "column": 38
+              },
+              "end": {
+                "offset": 44,
+                "row": 0,
+                "column": 44
+              }
+            },
+            {
+              "id": "n18",
+              "type": "call_expression",
+              "parentId": "n17",
+              "fieldName": null,
+              "children": [
+                "n19",
+                "n20"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 38,
+                "row": 0,
+                "column": 38
+              },
+              "end": {
+                "offset": 43,
+                "row": 0,
+                "column": 43
+              }
+            },
+            {
+              "id": "n19",
+              "type": "identifier",
+              "parentId": "n18",
+              "fieldName": "function",
+              "children": [],
+              "text": "sum",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 38,
+                "row": 0,
+                "column": 38
+              },
+              "end": {
+                "offset": 41,
+                "row": 0,
+                "column": 41
+              }
+            },
+            {
+              "id": "n20",
+              "type": "arguments",
+              "parentId": "n18",
+              "fieldName": "arguments",
+              "children": [
+                "n21",
+                "n22"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 41,
+                "row": 0,
+                "column": 41
+              },
+              "end": {
+                "offset": 43,
+                "row": 0,
+                "column": 43
+              }
+            },
+            {
+              "id": "n21",
+              "type": "(",
+              "parentId": "n20",
+              "fieldName": null,
+              "children": [],
+              "text": "(",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 41,
+                "row": 0,
+                "column": 41
+              },
+              "end": {
+                "offset": 42,
+                "row": 0,
+                "column": 42
+              }
+            },
+            {
+              "id": "n22",
+              "type": ")",
+              "parentId": "n20",
+              "fieldName": null,
+              "children": [],
+              "text": ")",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 42,
+                "row": 0,
+                "column": 42
+              },
+              "end": {
+                "offset": 43,
+                "row": 0,
+                "column": 43
+              }
+            },
+            {
+              "id": "n23",
+              "type": ";",
+              "parentId": "n17",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 43,
+                "row": 0,
+                "column": 43
+              },
+              "end": {
+                "offset": 44,
+                "row": 0,
+                "column": 44
+              }
+            },
+            {
+              "id": "n24",
+              "type": "function_declaration",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n25",
+                "n26",
+                "n27",
+                "n30"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 45,
+                "row": 0,
+                "column": 45
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            },
+            {
+              "id": "n25",
+              "type": "function",
+              "parentId": "n24",
+              "fieldName": null,
+              "children": [],
+              "text": "function",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 45,
+                "row": 0,
+                "column": 45
+              },
+              "end": {
+                "offset": 53,
+                "row": 0,
+                "column": 53
+              }
+            },
+            {
+              "id": "n26",
+              "type": "identifier",
+              "parentId": "n24",
+              "fieldName": "name",
+              "children": [],
+              "text": "caller",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 54,
+                "row": 0,
+                "column": 54
+              },
+              "end": {
+                "offset": 60,
+                "row": 0,
+                "column": 60
+              }
+            },
+            {
+              "id": "n27",
+              "type": "formal_parameters",
+              "parentId": "n24",
+              "fieldName": "parameters",
+              "children": [
+                "n28",
+                "n29"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 60,
+                "row": 0,
+                "column": 60
+              },
+              "end": {
+                "offset": 62,
+                "row": 0,
+                "column": 62
+              }
+            },
+            {
+              "id": "n28",
+              "type": "(",
+              "parentId": "n27",
+              "fieldName": null,
+              "children": [],
+              "text": "(",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 60,
+                "row": 0,
+                "column": 60
+              },
+              "end": {
+                "offset": 61,
+                "row": 0,
+                "column": 61
+              }
+            },
+            {
+              "id": "n29",
+              "type": ")",
+              "parentId": "n27",
+              "fieldName": null,
+              "children": [],
+              "text": ")",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 61,
+                "row": 0,
+                "column": 61
+              },
+              "end": {
+                "offset": 62,
+                "row": 0,
+                "column": 62
+              }
+            },
+            {
+              "id": "n30",
+              "type": "statement_block",
+              "parentId": "n24",
+              "fieldName": "body",
+              "children": [
+                "n31",
+                "n32",
+                "n40"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 62,
+                "row": 0,
+                "column": 62
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            },
+            {
+              "id": "n31",
+              "type": "{",
+              "parentId": "n30",
+              "fieldName": null,
+              "children": [],
+              "text": "{",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 62,
+                "row": 0,
+                "column": 62
+              },
+              "end": {
+                "offset": 63,
+                "row": 0,
+                "column": 63
+              }
+            },
+            {
+              "id": "n32",
+              "type": "return_statement",
+              "parentId": "n30",
+              "fieldName": null,
+              "children": [
+                "n33",
+                "n34",
+                "n39"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 63,
+                "row": 0,
+                "column": 63
+              },
+              "end": {
+                "offset": 76,
+                "row": 0,
+                "column": 76
+              }
+            },
+            {
+              "id": "n33",
+              "type": "return",
+              "parentId": "n32",
+              "fieldName": null,
+              "children": [],
+              "text": "return",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 63,
+                "row": 0,
+                "column": 63
+              },
+              "end": {
+                "offset": 69,
+                "row": 0,
+                "column": 69
+              }
+            },
+            {
+              "id": "n34",
+              "type": "call_expression",
+              "parentId": "n32",
+              "fieldName": null,
+              "children": [
+                "n35",
+                "n36"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 70,
+                "row": 0,
+                "column": 70
+              },
+              "end": {
+                "offset": 75,
+                "row": 0,
+                "column": 75
+              }
+            },
+            {
+              "id": "n35",
+              "type": "identifier",
+              "parentId": "n34",
+              "fieldName": "function",
+              "children": [],
+              "text": "sum",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 70,
+                "row": 0,
+                "column": 70
+              },
+              "end": {
+                "offset": 73,
+                "row": 0,
+                "column": 73
+              }
+            },
+            {
+              "id": "n36",
+              "type": "arguments",
+              "parentId": "n34",
+              "fieldName": "arguments",
+              "children": [
+                "n37",
+                "n38"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 73,
+                "row": 0,
+                "column": 73
+              },
+              "end": {
+                "offset": 75,
+                "row": 0,
+                "column": 75
+              }
+            },
+            {
+              "id": "n37",
+              "type": "(",
+              "parentId": "n36",
+              "fieldName": null,
+              "children": [],
+              "text": "(",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 73,
+                "row": 0,
+                "column": 73
+              },
+              "end": {
+                "offset": 74,
+                "row": 0,
+                "column": 74
+              }
+            },
+            {
+              "id": "n38",
+              "type": ")",
+              "parentId": "n36",
+              "fieldName": null,
+              "children": [],
+              "text": ")",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 74,
+                "row": 0,
+                "column": 74
+              },
+              "end": {
+                "offset": 75,
+                "row": 0,
+                "column": 75
+              }
+            },
+            {
+              "id": "n39",
+              "type": ";",
+              "parentId": "n32",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 75,
+                "row": 0,
+                "column": 75
+              },
+              "end": {
+                "offset": 76,
+                "row": 0,
+                "column": 76
+              }
+            },
+            {
+              "id": "n40",
+              "type": "}",
+              "parentId": "n30",
+              "fieldName": null,
+              "children": [],
+              "text": "}",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 76,
+                "row": 0,
+                "column": 76
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            }
+          ],
+          "parseStatus": "success",
+          "diagnostics": [],
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "resolution": {
+          "schemaVersion": 1,
+          "resolverVersion": "javascript-lexical-v1",
+          "sourceAst": {
+            "schemaVersion": 1,
+            "normalizationVersion": "syntax-preorder-v1",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "language": "JavaScript",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+            "rootId": "n0",
+            "parseStatus": "success",
+            "createdAt": "2026-11-12T00:00:00.000Z"
+          },
+          "astArtifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+          "metadataArtifact": {
+            "artifactId": "e920274910f87d4ad759a8d5f9f61a60a59032ef03298aac4ac030987d49678f",
+            "astArtifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "documentHash": "7fce94babc7957498cbf1fa376db9aad1414df49176840acc8344a0d4d5d8f6d",
+            "extractionStatus": "complete",
+            "entityCounts": {
+              "function": 1,
+              "import": 1,
+              "import_specifier": 1,
+              "module": 1
+            }
+          },
+          "status": "complete",
+          "scopes": [
+            {
+              "id": "scope-ad8e745fda7d1bf0b3f4c6ea97d260417ee8b50b1842730b6e80c04e0680564f",
+              "kind": "module",
+              "parentId": null,
+              "astNodeId": "n0",
+              "range": {
+                "start": {
+                  "offset": 0,
+                  "row": 0,
+                  "column": 0
+                },
+                "end": {
+                  "offset": 77,
+                  "row": 0,
+                  "column": 77
+                }
+              },
+              "children": [
+                "scope-9f0d4a1a0b78f3953205ab318ca5fcbd0c5357d16a1610912474118b0af94071"
+              ],
+              "bindings": [
+                "symbol-bf22744c4fa532d003bf28b7739add992d198ecab42cfc35dd50544e29134271",
+                "symbol-8dfbe73b400516d66b8663d4109afdfd7bd28f8c5a865e9a1ec52b754600ccb8"
+              ]
+            },
+            {
+              "id": "scope-9f0d4a1a0b78f3953205ab318ca5fcbd0c5357d16a1610912474118b0af94071",
+              "kind": "function",
+              "parentId": "scope-ad8e745fda7d1bf0b3f4c6ea97d260417ee8b50b1842730b6e80c04e0680564f",
+              "astNodeId": "n24",
+              "range": {
+                "start": {
+                  "offset": 45,
+                  "row": 0,
+                  "column": 45
+                },
+                "end": {
+                  "offset": 77,
+                  "row": 0,
+                  "column": 77
+                }
+              },
+              "children": [
+                "scope-36b39770fdb968f44318d1c90f263e93f52027ba868644468b29661ff38f298e"
+              ],
+              "bindings": []
+            },
+            {
+              "id": "scope-36b39770fdb968f44318d1c90f263e93f52027ba868644468b29661ff38f298e",
+              "kind": "block",
+              "parentId": "scope-9f0d4a1a0b78f3953205ab318ca5fcbd0c5357d16a1610912474118b0af94071",
+              "astNodeId": "n30",
+              "range": {
+                "start": {
+                  "offset": 62,
+                  "row": 0,
+                  "column": 62
+                },
+                "end": {
+                  "offset": 77,
+                  "row": 0,
+                  "column": 77
+                }
+              },
+              "children": [],
+              "bindings": []
+            }
+          ],
+          "symbols": [
+            {
+              "id": "symbol-bf22744c4fa532d003bf28b7739add992d198ecab42cfc35dd50544e29134271",
+              "name": "sum",
+              "kind": "import",
+              "scopeId": "scope-ad8e745fda7d1bf0b3f4c6ea97d260417ee8b50b1842730b6e80c04e0680564f",
+              "bindingNodeId": "n9",
+              "declarations": [
+                {
+                  "metadataEntityId": "meta-17f6f6ceb8246623576aa53ad0c6030f8157c8a3b3171f4832ce2db22e6e33d1",
+                  "astNodeId": "n6",
+                  "range": {
+                    "start": {
+                      "offset": 8,
+                      "row": 0,
+                      "column": 8
+                    },
+                    "end": {
+                      "offset": 18,
+                      "row": 0,
+                      "column": 18
+                    }
+                  }
+                }
+              ],
+              "initializationOffset": null,
+              "modifiers": [],
+              "import": {
+                "importedName": "add",
+                "moduleSpecifier": "./core.js",
+                "targetStatus": "deferred"
+              }
+            },
+            {
+              "id": "symbol-8dfbe73b400516d66b8663d4109afdfd7bd28f8c5a865e9a1ec52b754600ccb8",
+              "name": "caller",
+              "kind": "function",
+              "scopeId": "scope-ad8e745fda7d1bf0b3f4c6ea97d260417ee8b50b1842730b6e80c04e0680564f",
+              "bindingNodeId": "n26",
+              "declarations": [
+                {
+                  "metadataEntityId": "meta-0dce9a5b6a83228a8ed7a31dc8066764d3d11e642b013b2ecd0a4365645d2bd2",
+                  "astNodeId": "n24",
+                  "range": {
+                    "start": {
+                      "offset": 45,
+                      "row": 0,
+                      "column": 45
+                    },
+                    "end": {
+                      "offset": 77,
+                      "row": 0,
+                      "column": 77
+                    }
+                  }
+                }
+              ],
+              "initializationOffset": null,
+              "modifiers": [],
+              "import": null
+            }
+          ],
+          "references": [
+            {
+              "id": "ref-cbf212c15f176337035e7b1667fe48da692af3ee74de44809f4d0f21331f29ff",
+              "name": "sum",
+              "astNodeId": "n19",
+              "range": {
+                "start": {
+                  "offset": 38,
+                  "row": 0,
+                  "column": 38
+                },
+                "end": {
+                  "offset": 41,
+                  "row": 0,
+                  "column": 41
+                }
+              },
+              "scopeId": "scope-ad8e745fda7d1bf0b3f4c6ea97d260417ee8b50b1842730b6e80c04e0680564f",
+              "usage": "call",
+              "status": "resolved",
+              "symbolId": "symbol-bf22744c4fa532d003bf28b7739add992d198ecab42cfc35dd50544e29134271",
+              "candidates": [],
+              "initialization": "not_applicable",
+              "diagnostics": []
+            },
+            {
+              "id": "ref-de3d10270e202afb53d6c0be18921e004ce0fe7e35a18b295d6bb00b4e90af0b",
+              "name": "sum",
+              "astNodeId": "n35",
+              "range": {
+                "start": {
+                  "offset": 70,
+                  "row": 0,
+                  "column": 70
+                },
+                "end": {
+                  "offset": 73,
+                  "row": 0,
+                  "column": 73
+                }
+              },
+              "scopeId": "scope-36b39770fdb968f44318d1c90f263e93f52027ba868644468b29661ff38f298e",
+              "usage": "call",
+              "status": "resolved",
+              "symbolId": "symbol-bf22744c4fa532d003bf28b7739add992d198ecab42cfc35dd50544e29134271",
+              "candidates": [],
+              "initialization": "not_applicable",
+              "diagnostics": []
+            }
+          ],
+          "diagnostics": [],
+          "astDiagnostics": [],
+          "metadataDiagnostics": []
+        },
+        "source": "import {add as sum} from \"./core.js\"; sum(); function caller(){return sum();}",
+        "codes": []
+      },
+      {
+        "relativePath": "core.js",
+        "ast": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "core.js",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "nodes": [
+            {
+              "id": "n0",
+              "type": "program",
+              "parentId": null,
+              "fieldName": null,
+              "children": [
+                "n1",
+                "n16"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 1,
+                "row": 0,
+                "column": 1
+              },
+              "end": {
+                "offset": 58,
+                "row": 1,
+                "column": 23
+              }
+            },
+            {
+              "id": "n1",
+              "type": "export_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n2",
+                "n3"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 1,
+                "row": 0,
+                "column": 1
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            {
+              "id": "n2",
+              "type": "export",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": "export",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 1,
+                "row": 0,
+                "column": 1
+              },
+              "end": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              }
+            },
+            {
+              "id": "n3",
+              "type": "function_declaration",
+              "parentId": "n1",
+              "fieldName": "declaration",
+              "children": [
+                "n4",
+                "n5",
+                "n6",
+                "n9"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            {
+              "id": "n4",
+              "type": "function",
+              "parentId": "n3",
+              "fieldName": null,
+              "children": [],
+              "text": "function",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 16,
+                "row": 0,
+                "column": 16
+              }
+            },
+            {
+              "id": "n5",
+              "type": "identifier",
+              "parentId": "n3",
+              "fieldName": "name",
+              "children": [],
+              "text": "add",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 17,
+                "row": 0,
+                "column": 17
+              },
+              "end": {
+                "offset": 20,
+                "row": 0,
+                "column": 20
+              }
+            },
+            {
+              "id": "n6",
+              "type": "formal_parameters",
+              "parentId": "n3",
+              "fieldName": "parameters",
+              "children": [
+                "n7",
+                "n8"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 20,
+                "row": 0,
+                "column": 20
+              },
+              "end": {
+                "offset": 22,
+                "row": 0,
+                "column": 22
+              }
+            },
+            {
+              "id": "n7",
+              "type": "(",
+              "parentId": "n6",
+              "fieldName": null,
+              "children": [],
+              "text": "(",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 20,
+                "row": 0,
+                "column": 20
+              },
+              "end": {
+                "offset": 21,
+                "row": 0,
+                "column": 21
+              }
+            },
+            {
+              "id": "n8",
+              "type": ")",
+              "parentId": "n6",
+              "fieldName": null,
+              "children": [],
+              "text": ")",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 21,
+                "row": 0,
+                "column": 21
+              },
+              "end": {
+                "offset": 22,
+                "row": 0,
+                "column": 22
+              }
+            },
+            {
+              "id": "n9",
+              "type": "statement_block",
+              "parentId": "n3",
+              "fieldName": "body",
+              "children": [
+                "n10",
+                "n11",
+                "n15"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 22,
+                "row": 0,
+                "column": 22
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            {
+              "id": "n10",
+              "type": "{",
+              "parentId": "n9",
+              "fieldName": null,
+              "children": [],
+              "text": "{",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 22,
+                "row": 0,
+                "column": 22
+              },
+              "end": {
+                "offset": 23,
+                "row": 0,
+                "column": 23
+              }
+            },
+            {
+              "id": "n11",
+              "type": "return_statement",
+              "parentId": "n9",
+              "fieldName": null,
+              "children": [
+                "n12",
+                "n13",
+                "n14"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 23,
+                "row": 0,
+                "column": 23
+              },
+              "end": {
+                "offset": 32,
+                "row": 0,
+                "column": 32
+              }
+            },
+            {
+              "id": "n12",
+              "type": "return",
+              "parentId": "n11",
+              "fieldName": null,
+              "children": [],
+              "text": "return",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 23,
+                "row": 0,
+                "column": 23
+              },
+              "end": {
+                "offset": 29,
+                "row": 0,
+                "column": 29
+              }
+            },
+            {
+              "id": "n13",
+              "type": "number",
+              "parentId": "n11",
+              "fieldName": null,
+              "children": [],
+              "text": "1",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 30,
+                "row": 0,
+                "column": 30
+              },
+              "end": {
+                "offset": 31,
+                "row": 0,
+                "column": 31
+              }
+            },
+            {
+              "id": "n14",
+              "type": ";",
+              "parentId": "n11",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 31,
+                "row": 0,
+                "column": 31
+              },
+              "end": {
+                "offset": 32,
+                "row": 0,
+                "column": 32
+              }
+            },
+            {
+              "id": "n15",
+              "type": "}",
+              "parentId": "n9",
+              "fieldName": null,
+              "children": [],
+              "text": "}",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 32,
+                "row": 0,
+                "column": 32
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            {
+              "id": "n16",
+              "type": "throw_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n17",
+                "n18",
+                "n22"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 35,
+                "row": 1,
+                "column": 0
+              },
+              "end": {
+                "offset": 58,
+                "row": 1,
+                "column": 23
+              }
+            },
+            {
+              "id": "n17",
+              "type": "throw",
+              "parentId": "n16",
+              "fieldName": null,
+              "children": [],
+              "text": "throw",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 35,
+                "row": 1,
+                "column": 0
+              },
+              "end": {
+                "offset": 40,
+                "row": 1,
+                "column": 5
+              }
+            },
+            {
+              "id": "n18",
+              "type": "string",
+              "parentId": "n16",
+              "fieldName": null,
+              "children": [
+                "n19",
+                "n20",
+                "n21"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 41,
+                "row": 1,
+                "column": 6
+              },
+              "end": {
+                "offset": 57,
+                "row": 1,
+                "column": 22
+              }
+            },
+            {
+              "id": "n19",
+              "type": "\"",
+              "parentId": "n18",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 41,
+                "row": 1,
+                "column": 6
+              },
+              "end": {
+                "offset": 42,
+                "row": 1,
+                "column": 7
+              }
+            },
+            {
+              "id": "n20",
+              "type": "string_fragment",
+              "parentId": "n18",
+              "fieldName": null,
+              "children": [],
+              "text": "DO_NOT_EXECUTE",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 42,
+                "row": 1,
+                "column": 7
+              },
+              "end": {
+                "offset": 56,
+                "row": 1,
+                "column": 21
+              }
+            },
+            {
+              "id": "n21",
+              "type": "\"",
+              "parentId": "n18",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 56,
+                "row": 1,
+                "column": 21
+              },
+              "end": {
+                "offset": 57,
+                "row": 1,
+                "column": 22
+              }
+            },
+            {
+              "id": "n22",
+              "type": ";",
+              "parentId": "n16",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 57,
+                "row": 1,
+                "column": 22
+              },
+              "end": {
+                "offset": 58,
+                "row": 1,
+                "column": 23
+              }
+            }
+          ],
+          "parseStatus": "success",
+          "diagnostics": [],
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "resolution": {
+          "schemaVersion": 1,
+          "resolverVersion": "javascript-lexical-v1",
+          "sourceAst": {
+            "schemaVersion": 1,
+            "normalizationVersion": "syntax-preorder-v1",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "core.js",
+            "language": "JavaScript",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+            "rootId": "n0",
+            "parseStatus": "success",
+            "createdAt": "2026-11-12T00:00:00.000Z"
+          },
+          "astArtifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+          "metadataArtifact": {
+            "artifactId": "f07c933bd1ed4fc50372145d0a2e8cb95a320bb86e7038639cc7346ba092b7c8",
+            "astArtifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "documentHash": "193e9a2e23ba9506f1d3878f46566ddaf649e7b7bcee075ffc5d500a8458a62b",
+            "extractionStatus": "complete",
+            "entityCounts": {
+              "export": 1,
+              "function": 1,
+              "module": 1
+            }
+          },
+          "status": "complete",
+          "scopes": [
+            {
+              "id": "scope-6fc530290774dc527c8118908c8311e45df19dbab07bbf198dc85a8707e28a3a",
+              "kind": "module",
+              "parentId": null,
+              "astNodeId": "n0",
+              "range": {
+                "start": {
+                  "offset": 1,
+                  "row": 0,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 58,
+                  "row": 1,
+                  "column": 23
+                }
+              },
+              "children": [
+                "scope-ea6f13942ad80625d432652a6e6074456931c1cf62da933645b20112ad5d4997"
+              ],
+              "bindings": [
+                "symbol-04d5faedf8a8c63c2ef891e6aae05b09119acde0d482cfda85c01c04f172de2d"
+              ]
+            },
+            {
+              "id": "scope-ea6f13942ad80625d432652a6e6074456931c1cf62da933645b20112ad5d4997",
+              "kind": "function",
+              "parentId": "scope-6fc530290774dc527c8118908c8311e45df19dbab07bbf198dc85a8707e28a3a",
+              "astNodeId": "n3",
+              "range": {
+                "start": {
+                  "offset": 8,
+                  "row": 0,
+                  "column": 8
+                },
+                "end": {
+                  "offset": 33,
+                  "row": 0,
+                  "column": 33
+                }
+              },
+              "children": [
+                "scope-03295a6bdaf6bf27d503bab0a1565d25adfde4c658159ecb486f8791300ad8c8"
+              ],
+              "bindings": []
+            },
+            {
+              "id": "scope-03295a6bdaf6bf27d503bab0a1565d25adfde4c658159ecb486f8791300ad8c8",
+              "kind": "block",
+              "parentId": "scope-ea6f13942ad80625d432652a6e6074456931c1cf62da933645b20112ad5d4997",
+              "astNodeId": "n9",
+              "range": {
+                "start": {
+                  "offset": 22,
+                  "row": 0,
+                  "column": 22
+                },
+                "end": {
+                  "offset": 33,
+                  "row": 0,
+                  "column": 33
+                }
+              },
+              "children": [],
+              "bindings": []
+            }
+          ],
+          "symbols": [
+            {
+              "id": "symbol-04d5faedf8a8c63c2ef891e6aae05b09119acde0d482cfda85c01c04f172de2d",
+              "name": "add",
+              "kind": "function",
+              "scopeId": "scope-6fc530290774dc527c8118908c8311e45df19dbab07bbf198dc85a8707e28a3a",
+              "bindingNodeId": "n5",
+              "declarations": [
+                {
+                  "metadataEntityId": "meta-85bef382de14bf9b7565d5697d0d15f153cddcbeacf3ded96bcc950ca5b37b28",
+                  "astNodeId": "n3",
+                  "range": {
+                    "start": {
+                      "offset": 8,
+                      "row": 0,
+                      "column": 8
+                    },
+                    "end": {
+                      "offset": 33,
+                      "row": 0,
+                      "column": 33
+                    }
+                  }
+                }
+              ],
+              "initializationOffset": null,
+              "modifiers": [],
+              "import": null
+            }
+          ],
+          "references": [],
+          "diagnostics": [],
+          "astDiagnostics": [],
+          "metadataDiagnostics": []
+        },
+        "source": "﻿export function add(){return 1;}\r\nthrow \"DO_NOT_EXECUTE\";",
+        "codes": []
+      },
+      {
+        "relativePath": "second.js",
+        "ast": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "second.js",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "nodes": [
+            {
+              "id": "n0",
+              "type": "program",
+              "parentId": null,
+              "fieldName": null,
+              "children": [
+                "n1",
+                "n15"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            {
+              "id": "n1",
+              "type": "import_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n2",
+                "n3",
+                "n9",
+                "n10",
+                "n14"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 30,
+                "row": 0,
+                "column": 30
+              }
+            },
+            {
+              "id": "n2",
+              "type": "import",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": "import",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 6,
+                "row": 0,
+                "column": 6
+              }
+            },
+            {
+              "id": "n3",
+              "type": "import_clause",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [
+                "n4"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 12,
+                "row": 0,
+                "column": 12
+              }
+            },
+            {
+              "id": "n4",
+              "type": "named_imports",
+              "parentId": "n3",
+              "fieldName": null,
+              "children": [
+                "n5",
+                "n6",
+                "n8"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 12,
+                "row": 0,
+                "column": 12
+              }
+            },
+            {
+              "id": "n5",
+              "type": "{",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [],
+              "text": "{",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 7,
+                "row": 0,
+                "column": 7
+              },
+              "end": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              }
+            },
+            {
+              "id": "n6",
+              "type": "import_specifier",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [
+                "n7"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 11,
+                "row": 0,
+                "column": 11
+              }
+            },
+            {
+              "id": "n7",
+              "type": "identifier",
+              "parentId": "n6",
+              "fieldName": "name",
+              "children": [],
+              "text": "add",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 11,
+                "row": 0,
+                "column": 11
+              }
+            },
+            {
+              "id": "n8",
+              "type": "}",
+              "parentId": "n4",
+              "fieldName": null,
+              "children": [],
+              "text": "}",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 11,
+                "row": 0,
+                "column": 11
+              },
+              "end": {
+                "offset": 12,
+                "row": 0,
+                "column": 12
+              }
+            },
+            {
+              "id": "n9",
+              "type": "from",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": "from",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 13,
+                "row": 0,
+                "column": 13
+              },
+              "end": {
+                "offset": 17,
+                "row": 0,
+                "column": 17
+              }
+            },
+            {
+              "id": "n10",
+              "type": "string",
+              "parentId": "n1",
+              "fieldName": "source",
+              "children": [
+                "n11",
+                "n12",
+                "n13"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              },
+              "end": {
+                "offset": 29,
+                "row": 0,
+                "column": 29
+              }
+            },
+            {
+              "id": "n11",
+              "type": "\"",
+              "parentId": "n10",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              },
+              "end": {
+                "offset": 19,
+                "row": 0,
+                "column": 19
+              }
+            },
+            {
+              "id": "n12",
+              "type": "string_fragment",
+              "parentId": "n10",
+              "fieldName": null,
+              "children": [],
+              "text": "./core.js",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 19,
+                "row": 0,
+                "column": 19
+              },
+              "end": {
+                "offset": 28,
+                "row": 0,
+                "column": 28
+              }
+            },
+            {
+              "id": "n13",
+              "type": "\"",
+              "parentId": "n10",
+              "fieldName": null,
+              "children": [],
+              "text": "\"",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 28,
+                "row": 0,
+                "column": 28
+              },
+              "end": {
+                "offset": 29,
+                "row": 0,
+                "column": 29
+              }
+            },
+            {
+              "id": "n14",
+              "type": ";",
+              "parentId": "n1",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 29,
+                "row": 0,
+                "column": 29
+              },
+              "end": {
+                "offset": 30,
+                "row": 0,
+                "column": 30
+              }
+            },
+            {
+              "id": "n15",
+              "type": "expression_statement",
+              "parentId": "n0",
+              "fieldName": null,
+              "children": [
+                "n16",
+                "n21"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 31,
+                "row": 0,
+                "column": 31
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            {
+              "id": "n16",
+              "type": "call_expression",
+              "parentId": "n15",
+              "fieldName": null,
+              "children": [
+                "n17",
+                "n18"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 31,
+                "row": 0,
+                "column": 31
+              },
+              "end": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              }
+            },
+            {
+              "id": "n17",
+              "type": "identifier",
+              "parentId": "n16",
+              "fieldName": "function",
+              "children": [],
+              "text": "add",
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 31,
+                "row": 0,
+                "column": 31
+              },
+              "end": {
+                "offset": 34,
+                "row": 0,
+                "column": 34
+              }
+            },
+            {
+              "id": "n18",
+              "type": "arguments",
+              "parentId": "n16",
+              "fieldName": "arguments",
+              "children": [
+                "n19",
+                "n20"
+              ],
+              "named": true,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 34,
+                "row": 0,
+                "column": 34
+              },
+              "end": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              }
+            },
+            {
+              "id": "n19",
+              "type": "(",
+              "parentId": "n18",
+              "fieldName": null,
+              "children": [],
+              "text": "(",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 34,
+                "row": 0,
+                "column": 34
+              },
+              "end": {
+                "offset": 35,
+                "row": 0,
+                "column": 35
+              }
+            },
+            {
+              "id": "n20",
+              "type": ")",
+              "parentId": "n18",
+              "fieldName": null,
+              "children": [],
+              "text": ")",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 35,
+                "row": 0,
+                "column": 35
+              },
+              "end": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              }
+            },
+            {
+              "id": "n21",
+              "type": ";",
+              "parentId": "n15",
+              "fieldName": null,
+              "children": [],
+              "text": ";",
+              "named": false,
+              "error": false,
+              "missing": false,
+              "start": {
+                "offset": 36,
+                "row": 0,
+                "column": 36
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            }
+          ],
+          "parseStatus": "success",
+          "diagnostics": [],
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "resolution": {
+          "schemaVersion": 1,
+          "resolverVersion": "javascript-lexical-v1",
+          "sourceAst": {
+            "schemaVersion": 1,
+            "normalizationVersion": "syntax-preorder-v1",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "second.js",
+            "language": "JavaScript",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+            "rootId": "n0",
+            "parseStatus": "success",
+            "createdAt": "2026-11-12T00:00:00.000Z"
+          },
+          "astArtifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+          "metadataArtifact": {
+            "artifactId": "43f6562916bc5b8a04e0e956afbf3c26f3991381928c4aa778d1be0a171dfa27",
+            "astArtifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "documentHash": "16ad7cb2d987b6bb86a311849628156e391f352abe96de7d5cb5edb0619ad039",
+            "extractionStatus": "complete",
+            "entityCounts": {
+              "import": 1,
+              "import_specifier": 1,
+              "module": 1
+            }
+          },
+          "status": "complete",
+          "scopes": [
+            {
+              "id": "scope-f39ea9cb0448d1698510ef0402df2fcdcfc6aa2e24f67be8c233f5c357f4abbb",
+              "kind": "module",
+              "parentId": null,
+              "astNodeId": "n0",
+              "range": {
+                "start": {
+                  "offset": 0,
+                  "row": 0,
+                  "column": 0
+                },
+                "end": {
+                  "offset": 37,
+                  "row": 0,
+                  "column": 37
+                }
+              },
+              "children": [],
+              "bindings": [
+                "symbol-40b821a6cfccc83c18b9d273995b76ffb1eb5a1743b5736523571d25f95e56ca"
+              ]
+            }
+          ],
+          "symbols": [
+            {
+              "id": "symbol-40b821a6cfccc83c18b9d273995b76ffb1eb5a1743b5736523571d25f95e56ca",
+              "name": "add",
+              "kind": "import",
+              "scopeId": "scope-f39ea9cb0448d1698510ef0402df2fcdcfc6aa2e24f67be8c233f5c357f4abbb",
+              "bindingNodeId": "n7",
+              "declarations": [
+                {
+                  "metadataEntityId": "meta-701c9e60768f68ffafb76cbb64788ec6ff1b8211f2f54edbb7af555ed9f03c39",
+                  "astNodeId": "n6",
+                  "range": {
+                    "start": {
+                      "offset": 8,
+                      "row": 0,
+                      "column": 8
+                    },
+                    "end": {
+                      "offset": 11,
+                      "row": 0,
+                      "column": 11
+                    }
+                  }
+                }
+              ],
+              "initializationOffset": null,
+              "modifiers": [],
+              "import": {
+                "importedName": "add",
+                "moduleSpecifier": "./core.js",
+                "targetStatus": "deferred"
+              }
+            }
+          ],
+          "references": [
+            {
+              "id": "ref-8f6b42712dfd989ca964a5811d42df7022497cc8c8d0df31c4f730c18dd9997f",
+              "name": "add",
+              "astNodeId": "n17",
+              "range": {
+                "start": {
+                  "offset": 31,
+                  "row": 0,
+                  "column": 31
+                },
+                "end": {
+                  "offset": 34,
+                  "row": 0,
+                  "column": 34
+                }
+              },
+              "scopeId": "scope-f39ea9cb0448d1698510ef0402df2fcdcfc6aa2e24f67be8c233f5c357f4abbb",
+              "usage": "call",
+              "status": "resolved",
+              "symbolId": "symbol-40b821a6cfccc83c18b9d273995b76ffb1eb5a1743b5736523571d25f95e56ca",
+              "candidates": [],
+              "initialization": "not_applicable",
+              "diagnostics": []
+            }
+          ],
+          "diagnostics": [],
+          "astDiagnostics": [],
+          "metadataDiagnostics": []
+        },
+        "source": "import {add} from \"./core.js\"; add();",
+        "codes": []
+      },
+      {
+        "relativePath": "unsupported.ts",
+        "ast": null,
+        "resolution": null,
+        "source": null,
+        "codes": []
+      }
+    ]
+  },
+  "metadataAnalysis": {
+    "schemaVersion": 1,
+    "projectId": "PRJ-123ABC",
+    "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+    "extractionVersion": "project-metadata-v1/javascript-syntax-v1",
+    "status": "partial",
+    "createdAt": "2026-11-12T00:00:02.000Z",
+    "completedAt": "2026-11-12T00:00:03.000Z",
+    "sourceAnalysis": {
+      "schemaVersion": 1,
+      "projectId": "PRJ-123ABC",
+      "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+      "status": "completed",
+      "startedAt": "2026-11-12T00:00:00.000Z",
+      "completedAt": "2026-11-12T00:00:01.000Z",
+      "failureCode": null,
+      "counts": {
+        "parsed": 3,
+        "syntax_errors": 0,
+        "unsupported": 1,
+        "skipped": 0,
+        "read_failed": 0,
+        "parser_failed": 0,
+        "ast_failed": 0,
+        "storage_failed": 0
+      },
+      "files": [
+        {
+          "relativePath": "consumer.jsx",
+          "status": "parsed",
+          "code": null,
+          "message": null,
+          "artifact": {
+            "schemaVersion": 1,
+            "artifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "core.js",
+          "status": "parsed",
+          "code": null,
+          "message": null,
+          "artifact": {
+            "schemaVersion": 1,
+            "artifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "second.js",
+          "status": "parsed",
+          "code": null,
+          "message": null,
+          "artifact": {
+            "schemaVersion": 1,
+            "artifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "parserId": "tree-sitter-javascript",
+            "parserVersion": "0.25.1",
+            "grammarVersion": "0.25.0",
+            "normalizationVersion": "syntax-preorder-v1"
+          }
+        },
+        {
+          "relativePath": "unsupported.ts",
+          "status": "unsupported",
+          "code": "UNSUPPORTED_LANGUAGE_OR_EXTENSION",
+          "message": null,
+          "artifact": null
+        }
+      ]
+    },
+    "sourceAnalysisHash": "2d1cfc85ea20c0672e1693bc437e858379ab063102bd8d9935a9c21f26c0702c",
+    "files": [
+      {
+        "relativePath": "consumer.jsx",
+        "upstreamStatus": "parsed",
+        "status": "complete",
+        "sourceArtifact": {
+          "schemaVersion": 1,
+          "artifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+          "relativePath": "consumer.jsx",
+          "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "normalizationVersion": "syntax-preorder-v1"
+        },
+        "metadataArtifact": {
+          "artifactId": "e920274910f87d4ad759a8d5f9f61a60a59032ef03298aac4ac030987d49678f",
+          "astArtifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "consumer.jsx",
+          "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+          "documentHash": "7fce94babc7957498cbf1fa376db9aad1414df49176840acc8344a0d4d5d8f6d",
+          "extractionStatus": "complete",
+          "entityCounts": {
+            "function": 1,
+            "import": 1,
+            "import_specifier": 1,
+            "module": 1
+          }
+        },
+        "diagnostics": []
+      },
+      {
+        "relativePath": "core.js",
+        "upstreamStatus": "parsed",
+        "status": "complete",
+        "sourceArtifact": {
+          "schemaVersion": 1,
+          "artifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+          "relativePath": "core.js",
+          "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "normalizationVersion": "syntax-preorder-v1"
+        },
+        "metadataArtifact": {
+          "artifactId": "f07c933bd1ed4fc50372145d0a2e8cb95a320bb86e7038639cc7346ba092b7c8",
+          "astArtifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "core.js",
+          "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+          "documentHash": "193e9a2e23ba9506f1d3878f46566ddaf649e7b7bcee075ffc5d500a8458a62b",
+          "extractionStatus": "complete",
+          "entityCounts": {
+            "export": 1,
+            "function": 1,
+            "module": 1
+          }
+        },
+        "diagnostics": []
+      },
+      {
+        "relativePath": "second.js",
+        "upstreamStatus": "parsed",
+        "status": "complete",
+        "sourceArtifact": {
+          "schemaVersion": 1,
+          "artifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+          "relativePath": "second.js",
+          "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "normalizationVersion": "syntax-preorder-v1"
+        },
+        "metadataArtifact": {
+          "artifactId": "43f6562916bc5b8a04e0e956afbf3c26f3991381928c4aa778d1be0a171dfa27",
+          "astArtifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "second.js",
+          "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+          "documentHash": "16ad7cb2d987b6bb86a311849628156e391f352abe96de7d5cb5edb0619ad039",
+          "extractionStatus": "complete",
+          "entityCounts": {
+            "import": 1,
+            "import_specifier": 1,
+            "module": 1
+          }
+        },
+        "diagnostics": []
+      },
+      {
+        "relativePath": "unsupported.ts",
+        "upstreamStatus": "unsupported",
+        "status": "unsupported",
+        "sourceArtifact": null,
+        "metadataArtifact": null,
+        "diagnostics": []
+      }
+    ],
+    "entityCounts": {
+      "function": 2,
+      "import": 2,
+      "import_specifier": 2,
+      "module": 3,
+      "export": 1
+    },
+    "outcomeCounts": {
+      "complete": 3,
+      "unsupported": 1
+    },
+    "diagnostics": []
+  },
+  "metadataFiles": [
+    {
+      "relativePath": "consumer.jsx",
+      "metadata": {
+        "schemaVersion": 1,
+        "extractorVersion": "javascript-syntax-v1",
+        "sourceAst": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "consumer.jsx",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "parseStatus": "success",
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "extractionStatus": "complete",
+        "entities": [
+          {
+            "entityId": "meta-7ad19c9fc65d4f79a3bb8eea49e75f2b75ef6ef4a6d0d77f333f6f63e072dff5",
+            "kind": "module",
+            "name": "consumer.jsx",
+            "qualifiedName": "consumer.jsx",
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "astNodeId": "n0",
+            "parentEntityId": null,
+            "sourceRange": {
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            },
+            "attributes": {},
+            "properties": {}
+          },
+          {
+            "entityId": "meta-e73853c06d0d78c8e84e677ed65fe059d7b345b242b64eaaabb777b296d583f5",
+            "kind": "import",
+            "name": null,
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "astNodeId": "n1",
+            "parentEntityId": "meta-7ad19c9fc65d4f79a3bb8eea49e75f2b75ef6ef4a6d0d77f333f6f63e072dff5",
+            "sourceRange": {
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            "attributes": {},
+            "properties": {
+              "moduleSpecifier": {
+                "astNodeId": "n12",
+                "type": "string",
+                "tokens": [
+                  {
+                    "text": "\"",
+                    "astNodeId": "n13"
+                  },
+                  {
+                    "text": "./core.js",
+                    "astNodeId": "n14"
+                  },
+                  {
+                    "text": "\"",
+                    "astNodeId": "n15"
+                  }
+                ]
+              },
+              "sideEffectOnly": false
+            }
+          },
+          {
+            "entityId": "meta-17f6f6ceb8246623576aa53ad0c6030f8157c8a3b3171f4832ce2db22e6e33d1",
+            "kind": "import_specifier",
+            "name": "sum",
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "astNodeId": "n6",
+            "parentEntityId": "meta-e73853c06d0d78c8e84e677ed65fe059d7b345b242b64eaaabb777b296d583f5",
+            "sourceRange": {
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 18,
+                "row": 0,
+                "column": 18
+              }
+            },
+            "attributes": {},
+            "properties": {
+              "importedName": "add",
+              "importKind": "named"
+            }
+          },
+          {
+            "entityId": "meta-0dce9a5b6a83228a8ed7a31dc8066764d3d11e642b013b2ecd0a4365645d2bd2",
+            "kind": "function",
+            "name": "caller",
+            "qualifiedName": "consumer.jsx.caller",
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "consumer.jsx",
+            "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+            "astNodeId": "n24",
+            "parentEntityId": "meta-7ad19c9fc65d4f79a3bb8eea49e75f2b75ef6ef4a6d0d77f333f6f63e072dff5",
+            "sourceRange": {
+              "start": {
+                "offset": 45,
+                "row": 0,
+                "column": 45
+              },
+              "end": {
+                "offset": 77,
+                "row": 0,
+                "column": 77
+              }
+            },
+            "attributes": {
+              "async": false,
+              "generator": false
+            },
+            "properties": {
+              "syntaxKind": "function_declaration",
+              "anonymous": false,
+              "bodyAstNodeId": "n30"
+            }
+          }
+        ],
+        "diagnostics": [],
+        "summary": {
+          "function": 1,
+          "import": 1,
+          "import_specifier": 1,
+          "module": 1
+        }
+      },
+      "reference": {
+        "artifactId": "e920274910f87d4ad759a8d5f9f61a60a59032ef03298aac4ac030987d49678f",
+        "astArtifactId": "e9f835969f5080680102a2b5a40e1158d354abbd036d6fc9a799027e43ac1fb7",
+        "projectId": "PRJ-123ABC",
+        "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+        "relativePath": "consumer.jsx",
+        "contentHash": "7a506d1f20378f7b0206de1eb49869c6b767ad66bfa0154a6afef4596687656e",
+        "documentHash": "7fce94babc7957498cbf1fa376db9aad1414df49176840acc8344a0d4d5d8f6d",
+        "extractionStatus": "complete",
+        "entityCounts": {
+          "function": 1,
+          "import": 1,
+          "import_specifier": 1,
+          "module": 1
+        }
+      }
+    },
+    {
+      "relativePath": "core.js",
+      "metadata": {
+        "schemaVersion": 1,
+        "extractorVersion": "javascript-syntax-v1",
+        "sourceAst": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "core.js",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "parseStatus": "success",
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "extractionStatus": "complete",
+        "entities": [
+          {
+            "entityId": "meta-3aa467895c3b8e55d1b0d0e67540c1f9237e01651947bdcef17845cef71de153",
+            "kind": "module",
+            "name": "core.js",
+            "qualifiedName": "core.js",
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "astNodeId": "n0",
+            "parentEntityId": null,
+            "sourceRange": {
+              "start": {
+                "offset": 1,
+                "row": 0,
+                "column": 1
+              },
+              "end": {
+                "offset": 58,
+                "row": 1,
+                "column": 23
+              }
+            },
+            "attributes": {},
+            "properties": {}
+          },
+          {
+            "entityId": "meta-efb1a49f895d56cf936bbc702de85d7818638c3d2c5ff879509e73e9d37de2e3",
+            "kind": "export",
+            "name": null,
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "astNodeId": "n1",
+            "parentEntityId": "meta-3aa467895c3b8e55d1b0d0e67540c1f9237e01651947bdcef17845cef71de153",
+            "sourceRange": {
+              "start": {
+                "offset": 1,
+                "row": 0,
+                "column": 1
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            "attributes": {},
+            "properties": {
+              "default": false,
+              "star": false,
+              "moduleSpecifier": null,
+              "declarationAstNodeId": "n3",
+              "valueSyntax": null
+            }
+          },
+          {
+            "entityId": "meta-85bef382de14bf9b7565d5697d0d15f153cddcbeacf3ded96bcc950ca5b37b28",
+            "kind": "function",
+            "name": "add",
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "core.js",
+            "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+            "astNodeId": "n3",
+            "parentEntityId": "meta-efb1a49f895d56cf936bbc702de85d7818638c3d2c5ff879509e73e9d37de2e3",
+            "sourceRange": {
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 33,
+                "row": 0,
+                "column": 33
+              }
+            },
+            "attributes": {
+              "async": false,
+              "generator": false
+            },
+            "properties": {
+              "syntaxKind": "function_declaration",
+              "anonymous": false,
+              "bodyAstNodeId": "n9"
+            }
+          }
+        ],
+        "diagnostics": [],
+        "summary": {
+          "export": 1,
+          "function": 1,
+          "module": 1
+        }
+      },
+      "reference": {
+        "artifactId": "f07c933bd1ed4fc50372145d0a2e8cb95a320bb86e7038639cc7346ba092b7c8",
+        "astArtifactId": "9079cfd981e5abf0dffb2cc6ab6c6483d699ffae92b715b061d8b3db45bdf963",
+        "projectId": "PRJ-123ABC",
+        "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+        "relativePath": "core.js",
+        "contentHash": "54a675a0d41074a43d449e1d2a6c86917e48f3bbf5b2c85e7e18f4b8da146835",
+        "documentHash": "193e9a2e23ba9506f1d3878f46566ddaf649e7b7bcee075ffc5d500a8458a62b",
+        "extractionStatus": "complete",
+        "entityCounts": {
+          "export": 1,
+          "function": 1,
+          "module": 1
+        }
+      }
+    },
+    {
+      "relativePath": "second.js",
+      "metadata": {
+        "schemaVersion": 1,
+        "extractorVersion": "javascript-syntax-v1",
+        "sourceAst": {
+          "schemaVersion": 1,
+          "normalizationVersion": "syntax-preorder-v1",
+          "projectId": "PRJ-123ABC",
+          "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+          "relativePath": "second.js",
+          "language": "JavaScript",
+          "parserId": "tree-sitter-javascript",
+          "parserVersion": "0.25.1",
+          "grammarVersion": "0.25.0",
+          "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+          "coordinates": "utf16-code-units; zero-based rows/columns; end-exclusive",
+          "rootId": "n0",
+          "parseStatus": "success",
+          "createdAt": "2026-11-12T00:00:00.000Z"
+        },
+        "extractionStatus": "complete",
+        "entities": [
+          {
+            "entityId": "meta-2411f1a566aea0e2f0fad30f2996691bc50afdb03cf089ee1438cca609ccfa99",
+            "kind": "module",
+            "name": "second.js",
+            "qualifiedName": "second.js",
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "astNodeId": "n0",
+            "parentEntityId": null,
+            "sourceRange": {
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 37,
+                "row": 0,
+                "column": 37
+              }
+            },
+            "attributes": {},
+            "properties": {}
+          },
+          {
+            "entityId": "meta-939a13d70fedb2d644f68d25b9701c061a89ede13cfb205416f0ad91aaee3abd",
+            "kind": "import",
+            "name": null,
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "astNodeId": "n1",
+            "parentEntityId": "meta-2411f1a566aea0e2f0fad30f2996691bc50afdb03cf089ee1438cca609ccfa99",
+            "sourceRange": {
+              "start": {
+                "offset": 0,
+                "row": 0,
+                "column": 0
+              },
+              "end": {
+                "offset": 30,
+                "row": 0,
+                "column": 30
+              }
+            },
+            "attributes": {},
+            "properties": {
+              "moduleSpecifier": {
+                "astNodeId": "n10",
+                "type": "string",
+                "tokens": [
+                  {
+                    "text": "\"",
+                    "astNodeId": "n11"
+                  },
+                  {
+                    "text": "./core.js",
+                    "astNodeId": "n12"
+                  },
+                  {
+                    "text": "\"",
+                    "astNodeId": "n13"
+                  }
+                ]
+              },
+              "sideEffectOnly": false
+            }
+          },
+          {
+            "entityId": "meta-701c9e60768f68ffafb76cbb64788ec6ff1b8211f2f54edbb7af555ed9f03c39",
+            "kind": "import_specifier",
+            "name": "add",
+            "qualifiedName": null,
+            "language": "JavaScript",
+            "projectId": "PRJ-123ABC",
+            "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+            "relativePath": "second.js",
+            "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+            "astNodeId": "n6",
+            "parentEntityId": "meta-939a13d70fedb2d644f68d25b9701c061a89ede13cfb205416f0ad91aaee3abd",
+            "sourceRange": {
+              "start": {
+                "offset": 8,
+                "row": 0,
+                "column": 8
+              },
+              "end": {
+                "offset": 11,
+                "row": 0,
+                "column": 11
+              }
+            },
+            "attributes": {},
+            "properties": {
+              "importedName": "add",
+              "importKind": "named"
+            }
+          }
+        ],
+        "diagnostics": [],
+        "summary": {
+          "import": 1,
+          "import_specifier": 1,
+          "module": 1
+        }
+      },
+      "reference": {
+        "artifactId": "43f6562916bc5b8a04e0e956afbf3c26f3991381928c4aa778d1be0a171dfa27",
+        "astArtifactId": "15feb1c28e7f6b3aac4ad94b09353a4386193ca764c70029865fd323c1e24d57",
+        "projectId": "PRJ-123ABC",
+        "analysisId": "AN-00000000-0000-0000-0000-000000000001",
+        "relativePath": "second.js",
+        "contentHash": "924e2f9830086907b73b36a6169f933e384a6ff05b42e68099e99b6b18982dd1",
+        "documentHash": "16ad7cb2d987b6bb86a311849628156e391f352abe96de7d5cb5edb0619ad039",
+        "extractionStatus": "complete",
+        "entityCounts": {
+          "import": 1,
+          "import_specifier": 1,
+          "module": 1
+        }
+      }
+    }
+  ]
+}

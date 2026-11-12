@@ -13,6 +13,9 @@ import {sourceRoutes} from "./modules/analysis/source-routes.js";
 import { searchRoutes } from "./modules/search-engine/routes.js";
 import { contextRoutes } from "./modules/ai-context/routes.js";
 import { reasoningRoutes } from "./modules/ai-reasoning/routes.js";
+import { moduleRoutes } from "./modules/module-linking/routes.js";
+import {bindingRoutes} from "./modules/cross-file-binding/routes.js";
+import {crossRelationshipRoutes} from "./modules/cross-file-relationships/routes.js";
 export function createApp(workspaces = new WorkspaceManagerService()) {
     const app = express();
     app.use(express.json({ limit: "128kb" }));
@@ -27,6 +30,9 @@ export function createApp(workspaces = new WorkspaceManagerService()) {
     app.use("/api/projects", searchRoutes(workspaces));
     app.use("/api/projects", contextRoutes(workspaces));
     app.use("/api/projects", reasoningRoutes(workspaces));
+    app.use("/api/projects", moduleRoutes(workspaces));
+    app.use("/api/projects", bindingRoutes(workspaces));
+    app.use("/api/projects", crossRelationshipRoutes(workspaces));
     app.use((_error: unknown, _req: Request, res: Response, _next: NextFunction) => {
         res.status(400).json({ code: "INVALID_REQUEST" });
     });

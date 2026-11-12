@@ -63,3 +63,39 @@ See [API contract](docs/AI_CONTEXT_PHASE_1_API.md), [producer audit](docs/AI_CON
 Prefer exact focus and a small explicit Context budget, e.g. maxBytes32768/maxEvidence12. Oversized provider requests fail instead of trimming authenticated evidence. Valid citation identities and structured facts do **not** prove model narrative correctness. Historical/candidate/static guarantees and partial coverage remain visible.
 
 [API/configuration](docs/AI_REASONING_PHASE_2_API.md), [contract audit](docs/AI_REASONING_PHASE_2_CONTRACT_AUDIT.md), [implementation report](docs/CODEATLAS_AI_REASONING_PHASE_2_IMPLEMENTATION_REPORT.md).
+
+## Cross-file Semantic Analysis — Phase 1
+
+An explicit immutable JavaScript module linker now associates static imports with supported export slots, using existing analyzed AST and lexical producer evidence. It handles aliases, defaults, namespaces, side effects, bounded named/star re-export chains, explicit-over-star precedence, ambiguity and valid cycles. Relative resolution is case-sensitive and inventory-only: explicit `.js`, `.jsx`, `.mjs` paths under policy `explicit-relative-js-v1`; no extensionless or package guessing.
+
+- `POST /api/projects/:projectId/analysis/:analysisId/modules/index` with `{}` builds or validates/reuses the sidecar. A terminal source analysis and existing lexical-resolution manifest are required.
+- `GET /api/projects/:projectId/analysis/:analysisId/modules` returns status/provenance/coverage.
+- `POST /api/projects/:projectId/analysis/:analysisId/modules/query`, e.g. `{"schemaVersion":1,"kind":"links","relativePath":"consumer.jsx","limit":20}`, inspects bounded modules/imports/exports/tables/links/chains/unresolved/diagnostics.
+
+Builds never run upstream producers or modify Graph/Search/AI. Published artifacts validate retained inputs and replay the projection on load. Changed current source cannot enter an old analysis: retained AST-only extraction discloses missing statement text, and existing artifacts remain original snapshots. Import/export association does not resolve alias uses, shadowing or namespace members, and adds no cross-file call/reference/Graph edges. Local exports of imported aliases remain deferred to Phase 2. TypeScript, Python and CommonJS linking remain unsupported coverage.
+
+See [producer audit](docs/CROSS_FILE_PHASE_1_CONTRACT_AUDIT.md), [API, bounds and integrity contract](docs/CROSS_FILE_PHASE_1_API.md), and [implementation/verification report](docs/CODEATLAS_CROSS_FILE_PHASE_1_IMPLEMENTATION_REPORT.md). Existing Git policy ignores `docs/`; these documents are provided locally. Focused tests: `npx vitest run src/modules/module-linking/tests`. Optional real producer verification: `node --import tsx src/modules/module-linking/tests/live-integration.mts` with explicit `CODEATLAS_PYTHON_EXECUTABLE` and `CODEATLAS_PYTHON_REPOSITORY`; no analyzed source execution or external LLM request.
+
+## Cross-file Semantic Analysis — Phase 2
+
+Phase 2 adds a separate `cross-file-binding-v1` artifact using the authenticated Phase 1 sidecar and its retained lexical/AST evidence. Exact imported symbol IDs connect actual identifier references to declaration, default expression-slot or namespace origins. Parameter/block/catch shadowing is preserved through existing lexical targets. Proven imported-local export lists and aliases propagate in new Phase 2 witnesses; Phase 1 remains unchanged.
+
+- `POST /api/projects/:projectId/analysis/:analysisId/cross-file/index` with `{}` explicitly builds/reuses the artifact. Requires existing Phase 1 and matching terminal source/lexical manifests; never runs producers.
+- `GET /api/projects/:projectId/analysis/:analysisId/cross-file` returns provenance, counts, coverage and limits.
+- `POST /api/projects/:projectId/analysis/:analysisId/cross-file/query`, e.g. `{"schemaVersion":1,"kind":"references","relativePath":"consumer.jsx","limit":20}`, inspects bindings/references/exports/origins/chains/namespaces/ambiguous/unresolved/diagnostics.
+
+Claims distinguish export slots, lexical bindings, exact declarations and actual references. Namespace receivers remain separate from supported direct dot/static-literal members; dynamic, optional, nested and mutation accesses remain unsupported. Null producer identities stay null, and default expression slots never become initializer-callee identities. No imported code executes, current source is not reread, and no lexical/Phase 1/Graph/Search/AI artifacts or cross-file graph edges are changed. Python and React source remain untouched.
+
+See [Phase 2 audit](docs/CROSS_FILE_PHASE_2_CONTRACT_AUDIT.md), [API and bounds](docs/CROSS_FILE_PHASE_2_API.md), and [implementation/verification report](docs/CODEATLAS_CROSS_FILE_PHASE_2_IMPLEMENTATION_REPORT.md). Existing Git policy ignores docs/. Focused tests: `npx vitest run src/modules/cross-file-binding/tests`. Optional live check: `node --import tsx src/modules/cross-file-binding/tests/live-integration.mts`, with the existing Python executable/repository supplied explicitly through CODEATLAS_PYTHON_EXECUTABLE and CODEATLAS_PYTHON_REPOSITORY; isolated local fixtures, no external LLM.
+
+## Cross-file Semantic Analysis — Phase 3
+
+`cross-file-relationship-v1` is a separate immutable sidecar for supported direct cross-file calls and direct static import/re-export dependencies. Calls require exact native callee syntax, authenticated Phase 2 reference/member and origin evidence, a uniquely supported function declaration/direct default function slot, and an exact lexical caller or module context. Anonymous/arrow/method callers retain AST/scope identity without invented metadata. Distinct call sites and dependency statements retain independent occurrence IDs.
+
+- `POST /api/projects/:projectId/analysis/:analysisId/cross-file/relationships/index` with `{}` builds/reuses the sidecar. Requires explicitly built, matching Phase 1/2 and source/lexical manifests; never runs producers.
+- `GET /api/projects/:projectId/analysis/:analysisId/cross-file/relationships` returns status/provenance/coverage.
+- `POST /api/projects/:projectId/analysis/:analysisId/cross-file/relationships/query`, e.g. `{"schemaVersion":1,"kind":"calls","sourcePath":"consumer.jsx","limit":20}`, inspects calls/dependencies/candidates/unresolved/contexts/diagnostics with strict identity filters.
+
+Guarantees are static associations, not runtime execution/loading/initialization. Indirect/optional/tagged calls, arbitrary value flow, mutable target bindings, constructors, classes and non-function expression results remain candidates. Namespace calls require exact Phase 2 receiver/member proof. Dependencies follow source statements, not transitive witness hops; side effects need no invented binding. No established READS/WRITES/CREATES/INSTANTIATES and no automatic Graph/Search/AI projection. Existing producer, Python and React sources stay unchanged.
+
+See [Phase 3 audit](docs/CROSS_FILE_PHASE_3_CONTRACT_AUDIT.md), [API and static guarantees](docs/CROSS_FILE_PHASE_3_API.md), and [implementation/verification report](docs/CODEATLAS_CROSS_FILE_PHASE_3_IMPLEMENTATION_REPORT.md). Docs remain locally ignored under existing Git policy. Focused tests: `npx vitest run src/modules/cross-file-relationships/tests`. Optional real producer check: `node --import tsx src/modules/cross-file-relationships/tests/live-integration.mts` with explicit existing CODEATLAS_PYTHON_EXECUTABLE and CODEATLAS_PYTHON_REPOSITORY; isolated temporary fixtures, no external LLM.
